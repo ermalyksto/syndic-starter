@@ -1,0 +1,4 @@
+- always mock back end services
+  - implement responsive design for desktop and mobile devices
+  - use i18next and translate all content
+  - use redux-toolkit for the application state

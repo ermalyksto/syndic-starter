@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "name": "Жилищна сграда - ул. Витоша 15",
+    "location": "София, бул. Витоша 15",
+    "coOwners": [
+      { "id": "1", "email": "owner1@test.com", "weight": 30 },
+      { "id": "2", "email": "owner2@test.com", "weight": 45 },
+      { "id": "3", "email": "owner3@test.com", "weight": 25 }
+    ]
+  }
+]
