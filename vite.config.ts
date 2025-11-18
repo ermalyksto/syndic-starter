@@ -8,6 +8,7 @@ export default defineConfig({
     proxy: {
       "^/api": "http://example.com/",
     },
+    port: 8080,
   },
   resolve: {
     alias: {
