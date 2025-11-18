@@ -64,7 +64,7 @@ export default defineMock([
     method: "GET",
     body: (req) => {
       const { id } = req.params;
-      const assembliesArray = meetings as Assembly[];
+      const assembliesArray = coowner_meetings as Assembly[];
       const assembly = assembliesArray.find((a) => a.id === id);
 
       if (!assembly) {

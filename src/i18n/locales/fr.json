@@ -38,14 +38,14 @@
     "upcomingAssemblies": "Assemblées à venir",
     "noAssemblies": "Aucune assemblée prévue",
     "status": {
-      "upcoming": "À venir",
+      "draft": "Brouillon",
       "active": "Active",
       "completed": "Terminée"
     },
     "participants": "participants",
     "delegated": "délégués",
     "eventLog": "Journal des événements",
-    "manage": "Gérer",
+    "manage": "Modifier",
     "invite": "Inviter",
     "quickActions": "Actions rapides",
     "delegateVote": "Déléguer le vote",

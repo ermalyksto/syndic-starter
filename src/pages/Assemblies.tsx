@@ -137,12 +137,12 @@ const Assemblies = () => {
                                 : "default"
                             }
                             className={
-                              assembly.status === "upcoming"
+                              assembly.status === "draft"
                                 ? "bg-primary text-primary-foreground"
                                 : ""
                             }
                           >
-                            {assembly.status === "upcoming" ? (
+                            {assembly.status === "draft" ? (
                               <>
                                 <Clock className="h-3 w-3 mr-1" /> Предстоящо
                               </>

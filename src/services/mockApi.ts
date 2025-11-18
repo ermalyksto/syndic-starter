@@ -1,6 +1,6 @@
 import { User } from "@/store/slices/authSlice";
 
-export type AssemblyStatus = "upcoming" | "active" | "completed";
+export type AssemblyStatus = "draft" | "active" | "completed";
 
 export interface AgendaItem {
   id: string;

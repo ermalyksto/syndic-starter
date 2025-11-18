@@ -38,14 +38,14 @@
     "upcomingAssemblies": "Предстоящи общи събрания",
     "noAssemblies": "Няма предстоящи събрания",
     "status": {
-      "upcoming": "Предстоящ",
+      "draft": "Чернова",
       "active": "Активен",
       "completed": "Приключен"
     },
     "participants": "участници",
     "delegated": "делегирани",
     "eventLog": "Лог със събития",
-    "manage": "Менежиране",
+    "manage": "Редактирай",
     "invite": "Покани",
     "quickActions": "Бързи действия",
     "delegateVote": "Делегирай глас",
