@@ -2,7 +2,8 @@
   {
     "id": "1",
     "title": "Годишно общо събрание 2025",
-    "status": "upcoming",
+    "status": "active",
+    "voted": false,
     "date": "2025-01-15",
     "time": "18:00",
     "participantsCount": 0,
@@ -17,7 +18,11 @@
       {
         "id": "2",
         "description": "Одобряване на бюджет за 2025",
-        "customVotingOptions": ["Одобрявам", "Не одобрявам", "Предлагам промени"]
+        "customVotingOptions": [
+          "Одобрявам",
+          "Не одобрявам",
+          "Предлагам промени"
+        ]
       }
     ]
   },
@@ -25,6 +30,7 @@
     "id": "2",
     "title": "Извънредно събрание - Ремонт на покрив",
     "status": "active",
+    "voted": true,
     "date": "2024-12-20",
     "time": "19:00",
     "participantsCount": 45,
@@ -42,6 +48,7 @@
     "id": "3",
     "title": "Общо събрание Q3 2024",
     "status": "completed",
+    "voted": false,
     "date": "2024-09-10",
     "time": "18:30",
     "participantsCount": 67,
@@ -53,6 +60,7 @@
     "id": "4",
     "title": "Извънредно събрание - Избор на нов синдик",
     "status": "completed",
+    "voted": true,
     "date": "2024-06-15",
     "time": "19:00",
     "participantsCount": 89,

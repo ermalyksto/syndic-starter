@@ -1,6 +1,6 @@
-import { User } from '@/store/slices/authSlice';
+import { User } from "@/store/slices/authSlice";
 
-export type AssemblyStatus = 'upcoming' | 'active' | 'completed';
+export type AssemblyStatus = "upcoming" | "active" | "completed";
 
 export interface AgendaItem {
   id: string;
@@ -44,7 +44,7 @@ export interface Property {
 }
 
 // API base URL - will use /api for development with setupProxy
-const API_BASE_URL = '/api';
+const API_BASE_URL = "/api";
 
 const handleApiError = (error: unknown) => {
   if (error instanceof Response) {
@@ -57,15 +57,15 @@ export const mockApi = {
   login: async (email: string, password: string): Promise<User> => {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
-        throw new Error('Невалиден имейл или парола');
+        throw new Error("Невалиден имейл или парола");
       }
 
       return await response.json();
@@ -74,18 +74,20 @@ export const mockApi = {
     }
   },
 
-  loginWithEmail: async (email: string): Promise<{ qrUrl: string; user: User }> => {
+  loginWithEmail: async (
+    email: string
+  ): Promise<{ qrUrl: string; user: User }> => {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/login-email`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email }),
       });
 
       if (!response.ok) {
-        throw new Error('Невалиден имейл');
+        throw new Error("Невалиден имейл");
       }
 
       return await response.json();
@@ -94,14 +96,15 @@ export const mockApi = {
     }
   },
 
-  getAssemblies: async (): Promise<Assembly[]> => {
+  getAssemblies: async (email: string): Promise<Assembly[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/assemblies`, {
-        method: 'GET',
+        method: "POST",
+        body: JSON.stringify({ email }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch assemblies');
+        throw new Error("Failed to fetch assemblies");
       }
 
       return await response.json();
@@ -113,11 +116,11 @@ export const mockApi = {
   getAssemblyStats: async (): Promise<AssemblyStats> => {
     try {
       const response = await fetch(`${API_BASE_URL}/assemblies/stats`, {
-        method: 'GET',
+        method: "GET",
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch assembly stats');
+        throw new Error("Failed to fetch assembly stats");
       }
 
       return await response.json();
@@ -135,15 +138,15 @@ export const mockApi = {
   }): Promise<Assembly> => {
     try {
       const response = await fetch(`${API_BASE_URL}/assemblies`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create assembly');
+        throw new Error("Failed to create assembly");
       }
 
       return await response.json();
@@ -152,24 +155,27 @@ export const mockApi = {
     }
   },
 
-  updateAssembly: async (id: string, data: {
-    title: string;
-    buildingLocation: string;
-    date: string;
-    time: string;
-    agendaItems: AgendaItem[];
-  }): Promise<Assembly> => {
+  updateAssembly: async (
+    id: string,
+    data: {
+      title: string;
+      buildingLocation: string;
+      date: string;
+      time: string;
+      agendaItems: AgendaItem[];
+    }
+  ): Promise<Assembly> => {
     try {
       const response = await fetch(`${API_BASE_URL}/assemblies/${id}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update assembly');
+        throw new Error("Failed to update assembly");
       }
 
       return await response.json();
@@ -181,11 +187,11 @@ export const mockApi = {
   deleteAssembly: async (id: string): Promise<void> => {
     try {
       const response = await fetch(`${API_BASE_URL}/assemblies/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete assembly');
+        throw new Error("Failed to delete assembly");
       }
     } catch (error) {
       handleApiError(error);
@@ -196,11 +202,11 @@ export const mockApi = {
   getProperties: async (): Promise<Property[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/properties`, {
-        method: 'GET',
+        method: "GET",
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch properties');
+        throw new Error("Failed to fetch properties");
       }
 
       return await response.json();
@@ -216,15 +222,15 @@ export const mockApi = {
   }): Promise<Property> => {
     try {
       const response = await fetch(`${API_BASE_URL}/properties`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create property');
+        throw new Error("Failed to create property");
       }
 
       return await response.json();

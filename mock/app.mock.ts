@@ -5,7 +5,8 @@ import qr_coowner from "./auth/login-email_coowner_POST.json";
 import syndic from "./auth/login_syndic_POST.json";
 import coowner from "./auth/login_coowner_POST.json";
 // import qr from "./auth/login-email_POST.json";
-import meetings from "./assemblies/_GET.json";
+import coowner_meetings from "./assemblies/coowner_GET.json";
+import syndic_meetings from "./assemblies/syndic_GET.json";
 import stats from "./assemblies/stats_GET.json";
 
 interface Assembly {
@@ -45,7 +46,14 @@ export default defineMock([
   },
   {
     url: "/api/assemblies",
-    body: meetings,
+    body: (req) => {
+      const { email } = req.body;
+
+      const meetings =
+        email === "owner@prop.bg" ? coowner_meetings : syndic_meetings;
+
+      return meetings;
+    },
   },
   {
     url: "/api/assemblies/stats",
