@@ -8,7 +8,8 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mockDevServerPlugin(),
-    mode === "development" && componentTagger(),
+    componentTagger(),
+    // mode === "development" && componentTagger(),
   ].filter(Boolean),
   server: {
     // host: "::",
