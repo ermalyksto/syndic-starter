@@ -1,8 +1,11 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/Layout/MainLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Users, FileText, CheckCircle, Clock, Plus } from "lucide-react";
+import { useAppSelector } from "@/store/hooks";
 import signatureImage from "@/assets/signature-icon.jpg";
 
 const Assemblies = () => {
@@ -94,7 +97,12 @@ const Assemblies = () => {
 
         {/* Assemblies List */}
         <div className="space-y-4">
-          {assemblies.map((assembly) => (
+          {isLoading ? (
+            <p className="text-center text-muted-foreground">Зареждане...</p>
+          ) : assemblies.length === 0 ? (
+            <p className="text-center text-muted-foreground">Няма налични събрания</p>
+          ) : (
+            assemblies.map((assembly) => (
             <Card key={assembly.id} className="shadow-card hover:shadow-md transition-shadow">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
@@ -120,34 +128,44 @@ const Assemblies = () => {
                         </span>
                         <span className="flex items-center gap-2">
                           <Users className="h-4 w-4" />
-                          {assembly.attendees} участници
+                          {assembly.participantsCount} участници
                         </span>
                         <span className="flex items-center gap-2">
                           <FileText className="h-4 w-4" />
-                          {assembly.location}
+                          {assembly.buildingLocation}
                         </span>
                       </div>
                     </div>
 
-                    <div>
-                      <h4 className="text-sm font-semibold text-foreground mb-2">Дневен ред:</h4>
-                      <ul className="space-y-1">
-                        {assembly.agenda.map((item, idx) => (
-                          <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
-                            <span className="text-primary font-medium">{idx + 1}.</span>
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                    {assembly.agendaItems && assembly.agendaItems.length > 0 && (
+                      <div>
+                        <h4 className="text-sm font-semibold text-foreground mb-2">Дневен ред:</h4>
+                        <ul className="space-y-1">
+                          {assembly.agendaItems.map((item: any, idx: number) => (
+                            <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
+                              <span className="text-primary font-medium">{idx + 1}.</span>
+                              {item.description}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex flex-col gap-2 ml-6">
                     {assembly.status === "upcoming" ? (
                       <>
-                        <Button>Изпрати покани</Button>
-                        <Button variant="outline">Редактирай</Button>
-                        <Button variant="outline">Пълномощни</Button>
+                        {user?.role === 'co-owner' ? (
+                          <Button onClick={() => navigate(`/assemblies/${assembly.id}/vote`)}>
+                            Гласувай
+                          </Button>
+                        ) : (
+                          <>
+                            <Button>Изпрати покани</Button>
+                            <Button variant="outline">Редактирай</Button>
+                            <Button variant="outline">Пълномощни</Button>
+                          </>
+                        )}
                       </>
                     ) : (
                       <>
@@ -160,7 +178,8 @@ const Assemblies = () => {
                 </div>
               </CardContent>
             </Card>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </MainLayout>

@@ -10,6 +10,7 @@ import CoOwnerDashboard from "./pages/CoOwnerDashboard";
 import Owners from "./pages/Owners";
 import Properties from "./pages/Properties";
 import Assemblies from "./pages/Assemblies";
+import VotingPage from "./pages/VotingPage";
 import Finances from "./pages/Finances";
 import Proxies from "./pages/Proxies";
 import Maintenance from "./pages/Maintenance";
@@ -67,6 +68,14 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <Assemblies />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/assemblies/:assemblyID/vote"
+            element={
+              <ProtectedRoute>
+                <VotingPage />
               </ProtectedRoute>
             }
           />
