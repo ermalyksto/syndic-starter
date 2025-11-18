@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/Layout/MainLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Users, FileText, CheckCircle, Clock, Plus } from "lucide-react";
@@ -9,38 +9,26 @@ import { useAppSelector } from "@/store/hooks";
 import signatureImage from "@/assets/signature-icon.jpg";
 
 const Assemblies = () => {
-  const assemblies = [
-    {
-      id: 1,
-      title: "Годишно общо събрание 2025",
-      date: "15 Януари 2025",
-      time: "18:00",
-      location: "Заседателна зала, ет. 1",
-      attendees: 142,
-      status: "upcoming",
-      agenda: ["Финансов отчет 2024", "Бюджет 2025", "Ремонт на покрива", "Избор на нов синдик"]
-    },
-    {
-      id: 2,
-      title: "Извънредно събрание - Асансьори",
-      date: "20 Декември 2024",
-      time: "19:00",
-      location: "Онлайн",
-      attendees: 98,
-      status: "upcoming",
-      agenda: ["Оферти за ремонт", "Гласуване за доставчик"]
-    },
-    {
-      id: 3,
-      title: "Редовно общо събрание Q3",
-      date: "15 Септември 2024",
-      time: "18:30",
-      location: "Заседателна зала, ет. 1",
-      attendees: 156,
-      status: "completed",
-      agenda: ["Отчет Q2-Q3", "Поддръжка общи части", "Нови договори"]
-    }
-  ];
+  const navigate = useNavigate();
+  const { user } = useAppSelector((state) => state.auth);
+  const [assemblies, setAssemblies] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAssemblies = async () => {
+      try {
+        const response = await fetch('/api/assemblies');
+        const data = await response.json();
+        setAssemblies(data);
+      } catch (error) {
+        console.error('Failed to fetch assemblies:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAssemblies();
+  }, []);
 
   return (
     <MainLayout>
@@ -103,81 +91,81 @@ const Assemblies = () => {
             <p className="text-center text-muted-foreground">Няма налични събрания</p>
           ) : (
             assemblies.map((assembly) => (
-            <Card key={assembly.id} className="shadow-card hover:shadow-md transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-4 flex-1">
-                    <div>
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-bold text-foreground">{assembly.title}</h3>
-                        <Badge 
-                          variant={assembly.status === "completed" ? "secondary" : "default"}
-                          className={assembly.status === "upcoming" ? "bg-primary text-primary-foreground" : ""}
-                        >
-                          {assembly.status === "upcoming" ? (
-                            <><Clock className="h-3 w-3 mr-1" /> Предстоящо</>
-                          ) : (
-                            <><CheckCircle className="h-3 w-3 mr-1" /> Завършено</>
-                          )}
-                        </Badge>
+              <Card key={assembly.id} className="shadow-card hover:shadow-md transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-4 flex-1">
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-xl font-bold text-foreground">{assembly.title}</h3>
+                          <Badge 
+                            variant={assembly.status === "completed" ? "secondary" : "default"}
+                            className={assembly.status === "upcoming" ? "bg-primary text-primary-foreground" : ""}
+                          >
+                            {assembly.status === "upcoming" ? (
+                              <><Clock className="h-3 w-3 mr-1" /> Предстоящо</>
+                            ) : (
+                              <><CheckCircle className="h-3 w-3 mr-1" /> Завършено</>
+                            )}
+                          </Badge>
+                        </div>
+                        <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                          <span className="flex items-center gap-2">
+                            <Calendar className="h-4 w-4" />
+                            {assembly.date} в {assembly.time}
+                          </span>
+                          <span className="flex items-center gap-2">
+                            <Users className="h-4 w-4" />
+                            {assembly.participantsCount} участници
+                          </span>
+                          <span className="flex items-center gap-2">
+                            <FileText className="h-4 w-4" />
+                            {assembly.buildingLocation}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-6 text-sm text-muted-foreground">
-                        <span className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4" />
-                          {assembly.date} в {assembly.time}
-                        </span>
-                        <span className="flex items-center gap-2">
-                          <Users className="h-4 w-4" />
-                          {assembly.participantsCount} участници
-                        </span>
-                        <span className="flex items-center gap-2">
-                          <FileText className="h-4 w-4" />
-                          {assembly.buildingLocation}
-                        </span>
-                      </div>
+
+                      {assembly.agendaItems && assembly.agendaItems.length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-semibold text-foreground mb-2">Дневен ред:</h4>
+                          <ul className="space-y-1">
+                            {assembly.agendaItems.map((item: any, idx: number) => (
+                              <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
+                                <span className="text-primary font-medium">{idx + 1}.</span>
+                                {item.description}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
 
-                    {assembly.agendaItems && assembly.agendaItems.length > 0 && (
-                      <div>
-                        <h4 className="text-sm font-semibold text-foreground mb-2">Дневен ред:</h4>
-                        <ul className="space-y-1">
-                          {assembly.agendaItems.map((item: any, idx: number) => (
-                            <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
-                              <span className="text-primary font-medium">{idx + 1}.</span>
-                              {item.description}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+                    <div className="flex flex-col gap-2 ml-6">
+                      {assembly.status === "upcoming" ? (
+                        <>
+                          {user?.role === 'co-owner' ? (
+                            <Button onClick={() => navigate(`/assemblies/${assembly.id}/vote`)}>
+                              Гласувай
+                            </Button>
+                          ) : (
+                            <>
+                              <Button>Изпрати покани</Button>
+                              <Button variant="outline">Редактирай</Button>
+                              <Button variant="outline">Пълномощни</Button>
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          <Button variant="outline">Виж протокол</Button>
+                          <Button variant="outline">Подписи</Button>
+                          <Button variant="outline">Изтегли</Button>
+                        </>
+                      )}
+                    </div>
                   </div>
-
-                  <div className="flex flex-col gap-2 ml-6">
-                    {assembly.status === "upcoming" ? (
-                      <>
-                        {user?.role === 'co-owner' ? (
-                          <Button onClick={() => navigate(`/assemblies/${assembly.id}/vote`)}>
-                            Гласувай
-                          </Button>
-                        ) : (
-                          <>
-                            <Button>Изпрати покани</Button>
-                            <Button variant="outline">Редактирай</Button>
-                            <Button variant="outline">Пълномощни</Button>
-                          </>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        <Button variant="outline">Виж протокол</Button>
-                        <Button variant="outline">Подписи</Button>
-                        <Button variant="outline">Изтегли</Button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
             ))
           )}
         </div>
