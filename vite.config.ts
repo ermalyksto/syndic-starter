@@ -8,11 +8,14 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mockDevServerPlugin(),
-    mode === 'development' && componentTagger(),
+    mode === "development" && componentTagger(),
   ].filter(Boolean),
   server: {
     host: "::",
     port: 8080,
+    proxy: {
+      "^/api": "http://example.com/",
+    },
   },
   resolve: {
     alias: {
