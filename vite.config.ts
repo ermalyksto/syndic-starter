@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
   ].filter(Boolean),
   server: {
-    host: "::",
+    // host: "::",
     port: 8080,
     proxy: {
       "^/api": "http://example.com/",
