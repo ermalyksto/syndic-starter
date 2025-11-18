@@ -1,13 +1,12 @@
 import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 import { mockDevServerPlugin } from "vite-plugin-mock-dev-server";
 import path from "path";
 
 export default defineConfig({
-  plugins: [mockDevServerPlugin()],
+  plugins: [react(), mockDevServerPlugin()],
   server: {
-    proxy: {
-      "^/api": "http://example.com/",
-    },
+    port: 8080,
   },
   resolve: {
     alias: {
