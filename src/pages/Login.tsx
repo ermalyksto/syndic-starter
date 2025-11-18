@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '@/store/hooks';
 import { setUser } from '@/store/slices/authSlice';
 import { mockApi } from '@/services/mockApi';
@@ -23,8 +23,11 @@ const Login = () => {
   const [copied, setCopied] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   const { t } = useTranslation();
+
+  const from = (location.state as any)?.from || '/';
 
   const handleCopyUrl = async () => {
     if (qrUrl) {
@@ -60,7 +63,7 @@ const Login = () => {
           title: t('auth.successLogin'),
           description: `${t('auth.welcome')}, ${user.name}!`,
         });
-        navigate('/');
+        navigate(from, { replace: true });
       }, 5000);
     } catch (error) {
       toast({
@@ -83,7 +86,7 @@ const Login = () => {
         title: t('auth.successLogin'),
         description: `${t('auth.welcome')}, ${user.name}!`,
       });
-      navigate('/');
+      navigate(from, { replace: true });
     } catch (error) {
       toast({
         title: t('auth.error'),
