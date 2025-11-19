@@ -41,6 +41,7 @@ const VotingPage = () => {
           throw new Error('Assembly not found');
         }
         const data = await response.json();
+        console.log("Assembly", data)
         setAssembly(data);
       } catch (error) {
         toast({

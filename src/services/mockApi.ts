@@ -98,8 +98,8 @@ export const mockApi = {
 
   getAssemblies: async (userId: string): Promise<Assembly[]> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/assemblies/${userId}`, {
-        method: "GET",
+      const response = await fetch(`${API_BASE_URL}/assemblies/user/${userId}`, {
+
       });
 
       if (!response.ok) {

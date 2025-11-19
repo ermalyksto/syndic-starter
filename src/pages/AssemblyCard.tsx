@@ -36,6 +36,8 @@ interface AssemblyCardProps {
   onManage?: (assembly: Assembly) => void;
   onDelete?: (assembly: Assembly) => void;
   onNavigate?: (assemblyId: string) => void;
+  onInvite?: (assemblyId: string) => void;
+  sendingInvites?: boolean;
 }
 
 export const AssemblyCard = ({
@@ -44,6 +46,8 @@ export const AssemblyCard = ({
   onManage,
   onDelete,
   onNavigate,
+  onInvite,
+  sendingInvites = false,
 }: AssemblyCardProps) => {
   const { t } = useTranslation();
   const [agendaExpanded, setAgendaExpanded] = useState(false);
@@ -147,7 +151,7 @@ export const AssemblyCard = ({
         </div>
 
         <div className="flex gap-2 flex-wrap lg:flex-shrink-0">
-          {assembly.status === "draft" && (
+          {userRole === "syndic" && assembly.status === "draft" && (
             <>
               <Button
                 variant="default"
@@ -165,9 +169,14 @@ export const AssemblyCard = ({
                 <Trash2 className="h-4 w-4 mr-2" />
                 {t("common.delete")}
               </Button>
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => onInvite?.(assembly.id)}
+                disabled={sendingInvites}
+              >
                 <Mail className="h-4 w-4 mr-2" />
-                {t("dashboard.invite")}
+                {sendingInvites ? t("dashboard.sending") : t("dashboard.invite")}
               </Button>
             </>
           )}
@@ -179,8 +188,8 @@ export const AssemblyCard = ({
           {userRole === "co-owner" && assembly.status === "completed" && (
             <Button size="sm" onClick={() => {}}>
               Протокол
-            </Button>
-          )}
+              </Button>
+            )}
           {userRole === "syndic" && (
               <Button variant="outline" size="sm">
                 <FileText className="h-4 w-4 mr-2" />

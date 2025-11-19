@@ -54,10 +54,9 @@ export default defineMock([
     },
   },
   {
-    url: "/api/assemblies/:id",
+    url: "/api/assemblies/user/:id",
     body: (req) => {
       const { id } = req.params;
-
       const meetings =
         id == coownerId ? coowner_meetings : syndic_meetings;
       return meetings;
@@ -84,6 +83,11 @@ export default defineMock([
 
       return assembly;
     },
+  },
+  {
+    url: "/api/invitations/${assemblyId}",
+    method: "POST",
+    body: {},
   },
   {
     url: "/api/properties/:id",

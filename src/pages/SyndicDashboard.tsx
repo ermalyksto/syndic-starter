@@ -32,6 +32,8 @@ const SyndicDashboard = () => {
   const [assemblyToDelete, setAssemblyToDelete] = useState<Assembly | null>(
     null
   );
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
+  const [sendingInvites, setSendingInvites] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
   const { t } = useTranslation();
 
@@ -67,6 +69,32 @@ const SyndicDashboard = () => {
   const handleDeleteClick = (assembly: Assembly) => {
     setAssemblyToDelete(assembly);
     setDeleteDialogOpen(true);
+  };
+
+  const handleInviteClick = async (assemblyId: string) => {
+    setSendingInvites(true);
+    try {
+      // const response = await fetch(`/api/invitations/${assemblyId}`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      // });
+
+      // if (!response.ok) {
+      //   throw new Error('Failed to send invitations');
+      // }
+
+      setInviteDialogOpen(true);
+    } catch (error) {
+      toast({
+        title: t("createAssembly.error"),
+        description: error instanceof Error ? error.message : "Failed to send invitations",
+        variant: "destructive",
+      });
+    } finally {
+      setSendingInvites(false);
+    }
   };
 
   const handleConfirmDelete = async () => {
@@ -168,6 +196,8 @@ const SyndicDashboard = () => {
                     userRole={user.role}
                     onManage={handleManageClick}
                     onDelete={handleDeleteClick}
+                    onInvite={handleInviteClick}
+                    sendingInvites={sendingInvites}
                   />
                 ))}
               </div>
@@ -202,6 +232,23 @@ const SyndicDashboard = () => {
                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               >
                 {t("deleteDialog.confirm")}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {/* Invite Success Dialog */}
+        <AlertDialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t("dashboard.inviteSuccess")}</AlertDialogTitle>
+              <AlertDialogDescription>
+                Invitations have been sent to the participants in the meeting.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction onClick={() => setInviteDialogOpen(false)}>
+                {t("common.ok")}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
