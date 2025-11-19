@@ -32,8 +32,7 @@ interface Assembly {
 
 interface AssemblyCardProps {
   assembly: Assembly;
-  userRole?: string;
-  showManageButtons?: boolean;
+  userRole?: "syndic" | "co-owner";
   onManage?: (assembly: Assembly) => void;
   onDelete?: (assembly: Assembly) => void;
   onNavigate?: (assemblyId: string) => void;
@@ -42,7 +41,6 @@ interface AssemblyCardProps {
 export const AssemblyCard = ({
   assembly,
   userRole,
-  showManageButtons = false,
   onManage,
   onDelete,
   onNavigate,
@@ -149,7 +147,7 @@ export const AssemblyCard = ({
         </div>
 
         <div className="flex gap-2 flex-wrap lg:flex-shrink-0">
-          {showManageButtons && assembly.status === "draft" && (
+          {assembly.status === "draft" && (
             <>
               <Button
                 variant="default"
@@ -173,42 +171,17 @@ export const AssemblyCard = ({
               </Button>
             </>
           )}
-          {!showManageButtons && assembly.status === "active" && !assembly.voted && (
-            <>
-              {userRole === "co-owner" ? (
-                <Button size="sm" onClick={() => onNavigate?.(assembly.id)}>
-                  Гласувай
-                </Button>
-              ) : (
-                <>
-                  <Button size="sm">Изпрати покани</Button>
-                  <Button variant="outline" size="sm">
-                    Редактирай
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    Пълномощни
-                  </Button>
-                </>
-              )}
-            </>
+          {userRole === "co-owner" && assembly.status === "active" && !assembly.voted && (
+            <Button size="sm" onClick={() => onNavigate?.(assembly.id)}>
+              Гласувай
+            </Button>
           )}
-          {!showManageButtons &&
-            (assembly.status === "completed" ||
-              (assembly.status === "active" && assembly.voted)) && (
-              <>
-                <Button variant="outline" size="sm">
-                  Виж протокол
-                </Button>
-                <Button variant="outline" size="sm">
-                  Подписи
-                </Button>
-                <Button variant="outline" size="sm">
-                  Изтегли
-                </Button>
-              </>
-            )}
-          {(assembly.status === "active" || assembly.status === "completed") &&
-            showManageButtons && (
+          {userRole === "co-owner" && assembly.status === "completed" && (
+            <Button size="sm" onClick={() => {}}>
+              Протокол
+            </Button>
+          )}
+          {userRole === "syndic" && (
               <Button variant="outline" size="sm">
                 <FileText className="h-4 w-4 mr-2" />
                 {t("dashboard.eventLog")}

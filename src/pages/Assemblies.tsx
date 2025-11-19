@@ -6,20 +6,20 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, Plus } from "lucide-react";
 import { useAppSelector } from "@/store/hooks";
 import signatureImage from "@/assets/signature-icon.jpg";
-import { mockApi } from "@/services/mockApi";
+import { Assembly, mockApi } from "@/services/mockApi";
 import { AssemblyCard } from "./AssemblyCard";
 
 const Assemblies = () => {
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
-  const [assemblies, setAssemblies] = useState<any[]>([]);
+  const [assemblies, setAssemblies] = useState<Assembly[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchAssemblies = async () => {
       try {
         // const response = await fetch("/api/assemblies");
-        const data = await mockApi.getAssemblies(user.email);
+        const data = await mockApi.getAssemblies(user.id);
 
         // const data = await response.json();
         // const data = await response;
@@ -32,7 +32,7 @@ const Assemblies = () => {
     };
 
     fetchAssemblies();
-  }, []);
+  }, [user]);
 
   const handleNavigateToVote = (assemblyId: string) => {
     navigate(`/assemblies/${assemblyId}/vote`);
@@ -41,20 +41,6 @@ const Assemblies = () => {
   return (
     <MainLayout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Общи събрания
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Управление на AGM с дигитални подписи и гласуване
-            </p>
-          </div>
-          <Button className="bg-gradient-to-r from-primary to-accent">
-            <Plus className="h-4 w-4 mr-2" />
-            Планирай събрание
-          </Button>
-        </div>
 
         {/* Features Banner */}
         <Card className="shadow-card overflow-hidden">
@@ -118,7 +104,6 @@ const Assemblies = () => {
               <AssemblyCard
                 key={assembly.id}
                 assembly={assembly}
-                showManageButtons={false}
                 userRole={user?.role}
                 onNavigate={handleNavigateToVote}
               />

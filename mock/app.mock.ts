@@ -27,6 +27,9 @@ interface AgendaItem {
   customVotingOptions?: string [];
 }
 
+const coownerId = 1;
+const syndicId = 2;
+
 export default defineMock([
   {
     url: "/api/auth/login-email",
@@ -51,13 +54,12 @@ export default defineMock([
     },
   },
   {
-    url: "/api/assemblies",
+    url: "/api/assemblies/:id",
     body: (req) => {
-      const { email } = req.body;
+      const { id } = req.params;
 
       const meetings =
-        email === "owner@prop.bg" ? coowner_meetings : syndic_meetings;
-
+        id == coownerId ? coowner_meetings : syndic_meetings;
       return meetings;
     },
   },

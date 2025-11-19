@@ -165,7 +165,7 @@ const SyndicDashboard = () => {
                   <AssemblyCard
                     key={assembly.id}
                     assembly={assembly}
-                    showManageButtons={true}
+                    userRole={user.role}
                     onManage={handleManageClick}
                     onDelete={handleDeleteClick}
                   />

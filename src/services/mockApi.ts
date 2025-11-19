@@ -96,11 +96,10 @@ export const mockApi = {
     }
   },
 
-  getAssemblies: async (email: string): Promise<Assembly[]> => {
+  getAssemblies: async (userId: string): Promise<Assembly[]> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/assemblies`, {
-        method: "POST",
-        body: JSON.stringify({ email }),
+      const response = await fetch(`${API_BASE_URL}/assemblies/${userId}`, {
+        method: "GET",
       });
 
       if (!response.ok) {
