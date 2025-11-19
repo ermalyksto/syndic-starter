@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { RegisterPropertyDialog } from "@/components/RegisterPropertyDialog";
 import { mockApi } from "@/services/mockApi";
 import { toast } from "@/hooks/use-toast";
+import { useAppSelector } from "@/store/hooks";
 
 export interface CoOwner {
   id: string;
@@ -26,11 +27,12 @@ const Properties = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [properties, setProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAppSelector((state) => state.auth);
 
   const loadProperties = async () => {
     try {
       setIsLoading(true);
-      const data = await mockApi.getProperties();
+      const data = await mockApi.getProperties(user.id);
       setProperties(data);
     } catch (error) {
       toast({

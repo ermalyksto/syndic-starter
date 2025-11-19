@@ -199,9 +199,9 @@ export const mockApi = {
   },
 
   // Property management
-  getProperties: async (): Promise<Property[]> => {
+  getProperties: async (userId: string): Promise<Property[]> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/properties`, {
+      const response = await fetch(`${API_BASE_URL}/properties/${userId}`, {
         method: "GET",
       });
 

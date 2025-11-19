@@ -8,6 +8,7 @@ import coowner from "./auth/login_coowner_POST.json";
 import coowner_meetings from "./assemblies/coowner_GET.json";
 import syndic_meetings from "./assemblies/syndic_GET.json";
 import stats from "./assemblies/stats_GET.json";
+import properties from "./properties/_GET.json";
 
 interface Assembly {
   id: string;
@@ -18,7 +19,12 @@ interface Assembly {
   participantsCount: number;
   delegatedOwnersCount: number;
   buildingLocation: string;
-  agendaItems: any[];
+  agendaItems: AgendaItem[];
+}
+interface AgendaItem {
+  id: string;
+  description: string;
+  customVotingOptions?: string [];
 }
 
 export default defineMock([
@@ -76,5 +82,13 @@ export default defineMock([
 
       return assembly;
     },
+  },
+  {
+    url: "/api/properties/:id",
+    body: (req) => {
+      const id = req.params[0];
+      console.log("Property owner", id);
+      return properties;
+    }
   },
 ]);
