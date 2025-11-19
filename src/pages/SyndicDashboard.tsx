@@ -1,17 +1,8 @@
 import { MainLayout } from "@/components/Layout/MainLayout";
 import { StatCard } from "@/components/Dashboard/StatCard";
-import {
-  Plus,
-  Users,
-  Calendar,
-  FileText,
-  Settings,
-  Trash2,
-  Mail,
-} from "lucide-react";
+import { Plus, Users, Calendar, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { mockApi, Assembly, AssemblyStats } from "@/services/mockApi";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -29,6 +20,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "@/hooks/use-toast";
 import { useAppSelector } from "@/store/hooks";
+import { AssemblyCard } from "./AssemblyCard";
 
 const SyndicDashboard = () => {
   const [assemblies, setAssemblies] = useState<Assembly[]>([]);
@@ -96,29 +88,6 @@ const SyndicDashboard = () => {
       setDeleteDialogOpen(false);
       setAssemblyToDelete(null);
     }
-  };
-
-  const getStatusBadge = (status: Assembly["status"]) => {
-    const variants = {
-      draft: {
-        label: t("dashboard.status.draft"),
-        className: "bg-blue-500/10 text-blue-600 border-blue-500/20",
-      },
-      active: {
-        label: t("dashboard.status.active"),
-        className: "bg-green-500/10 text-green-600 border-green-500/20",
-      },
-      completed: {
-        label: t("dashboard.status.completed"),
-        className: "bg-muted text-muted-foreground border-border",
-      },
-    };
-    const variant = variants[status];
-    return (
-      <Badge variant="outline" className={variant.className}>
-        {variant.label}
-      </Badge>
-    );
   };
 
   return (
@@ -193,76 +162,13 @@ const SyndicDashboard = () => {
             ) : (
               <div className="space-y-4">
                 {assemblies.map((assembly) => (
-                  <div
+                  <AssemblyCard
                     key={assembly.id}
-                    className="p-4 bg-muted rounded-lg hover:bg-muted/80 transition-colors"
-                  >
-                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                      <div className="flex-1 space-y-2">
-                        <div className="flex items-start gap-3 flex-wrap">
-                          <h3 className="font-semibold text-foreground">
-                            {assembly.title}
-                          </h3>
-                          {getStatusBadge(assembly.status)}
-                        </div>
-                        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
-                            <span>
-                              {assembly.date} в {assembly.time}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Users className="h-4 w-4" />
-                            <span>
-                              {assembly.participantsCount}{" "}
-                              {t("dashboard.participants")}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <FileText className="h-4 w-4" />
-                            <span>
-                              {assembly.delegatedOwnersCount}{" "}
-                              {t("dashboard.delegated")}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex gap-2 flex-wrap">
-                        {assembly.status === "draft" && (
-                          <>
-                            <Button
-                              variant="default"
-                              size="sm"
-                              onClick={() => handleManageClick(assembly)}
-                            >
-                              <Settings className="h-4 w-4 mr-2" />
-                              {t("dashboard.manage")}
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => handleDeleteClick(assembly)}
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              {t("common.delete")}
-                            </Button>
-                            <Button variant="outline" size="sm">
-                              <Mail className="h-4 w-4 mr-2" />
-                              {t("dashboard.invite")}
-                            </Button>
-                          </>
-                        )}
-                        {(assembly.status === "active" ||
-                          assembly.status === "completed") && (
-                          <Button variant="outline" size="sm">
-                            <FileText className="h-4 w-4 mr-2" />
-                            {t("dashboard.eventLog")}
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                    assembly={assembly}
+                    showManageButtons={true}
+                    onManage={handleManageClick}
+                    onDelete={handleDeleteClick}
+                  />
                 ))}
               </div>
             )}
