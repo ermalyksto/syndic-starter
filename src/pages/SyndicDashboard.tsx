@@ -4,10 +4,11 @@ import { Plus, Users, Calendar, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useCallback, useEffect, useState } from "react";
-import { mockApi, AssemblyStats } from "@/services/mockApi";
+import { mockApi, AssemblyStats, Property } from "@/services/mockApi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslation } from "react-i18next";
 import { CreateAssemblyDialog } from "@/components/CreateAssemblyDialog";
+import { PropertySelectDialog } from "@/components/PropertySelectDialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,11 +20,13 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from "@/hooks/use-toast";
-import { useAppSelector } from "@/store/hooks";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { setSelectedProperty } from "@/store/slices/propertySlice";
 import { AssemblyCard } from "./AssemblyCard";
 import { Assembly } from "@/types";
 
 const SyndicDashboard = () => {
+  const dispatch = useAppDispatch();
   const [assemblies, setAssemblies] = useState<Assembly[]>([]);
   const [stats, setStats] = useState<AssemblyStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -35,9 +38,36 @@ const SyndicDashboard = () => {
   );
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
   const [sendingInvites, setSendingInvites] = useState(false);
+  const [propertySelectDialogOpen, setPropertySelectDialogOpen] = useState(false);
+  const [selectedPropertyLocation, setSelectedPropertyLocation] = useState<string>("");
+  const [properties, setProperties] = useState<Property[]>([]);
   const { user } = useAppSelector((state) => state.auth);
   const { selectedPropertyId } = useAppSelector((state) => state.property);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (user?.id) {
+      loadProperties();
+    }
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (selectedPropertyId && properties.length > 0) {
+      const property = properties.find((p) => p.id === selectedPropertyId);
+      setSelectedPropertyLocation(property?.location || "");
+    } else {
+      setSelectedPropertyLocation("");
+    }
+  }, [selectedPropertyId, properties]);
+
+  const loadProperties = async () => {
+    try {
+      const data = await mockApi.getProperties(user.id);
+      setProperties(data);
+    } catch (error) {
+      console.error("Failed to load properties:", error);
+    }
+  };
 
   const loadData = useCallback(async () => {
     try {
@@ -144,7 +174,11 @@ const SyndicDashboard = () => {
             className="bg-gradient-to-br from-primary to-accent hover:opacity-90"
             onClick={() => {
               setEditingAssembly(null);
-              setCreateDialogOpen(true);
+              if (!selectedPropertyId) {
+                setPropertySelectDialogOpen(true);
+              } else {
+                setCreateDialogOpen(true);
+              }
             }}
           >
             <Plus className="h-4 w-4 mr-2" />
@@ -214,6 +248,18 @@ const SyndicDashboard = () => {
           </CardContent>
         </Card>
 
+        {/* Property Selection Dialog */}
+        <PropertySelectDialog
+          open={propertySelectDialogOpen}
+          onOpenChange={setPropertySelectDialogOpen}
+          onPropertySelected={(propertyId, location) => {
+            dispatch(setSelectedProperty(propertyId));
+            setSelectedPropertyLocation(location);
+            setPropertySelectDialogOpen(false);
+            setCreateDialogOpen(true);
+          }}
+        />
+
         {/* Create/Edit Assembly Dialog */}
         <CreateAssemblyDialog
           open={createDialogOpen}
@@ -223,6 +269,7 @@ const SyndicDashboard = () => {
           }}
           onSuccess={handleAssemblyCreated}
           assembly={editingAssembly || undefined}
+          propertyLocation={selectedPropertyLocation}
         />
 
         {/* Delete Confirmation Dialog */}

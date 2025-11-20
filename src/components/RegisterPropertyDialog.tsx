@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -7,9 +7,11 @@ import { Label } from "@/components/ui/label";
 import { Plus, Trash2, Edit } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { mockApi } from "@/services/mockApi";
 import { toast } from "@/hooks/use-toast";
 import { CoOwner } from "@/pages/Properties";
+import { useAppSelector } from "@/store/hooks";
 
 interface RegisterPropertyDialogProps {
   open: boolean;
@@ -19,15 +21,36 @@ interface RegisterPropertyDialogProps {
 
 export const RegisterPropertyDialog = ({ open, onOpenChange, onSuccess }: RegisterPropertyDialogProps) => {
   const { t } = useTranslation();
+  const { user } = useAppSelector((state) => state.auth);
   const [propertyName, setPropertyName] = useState("");
   const [propertyLocation, setPropertyLocation] = useState("");
   const [coOwners, setCoOwners] = useState<CoOwner[]>([]);
   const [isAddingCoOwner, setIsAddingCoOwner] = useState(false);
   const [editingCoOwnerId, setEditingCoOwnerId] = useState<string | null>(null);
-  const [coOwnerEmail, setCoOwnerEmail] = useState("");
+  const [selectedOwnerId, setSelectedOwnerId] = useState("");
   const [coOwnerWeight, setCoOwnerWeight] = useState("");
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [availableOwners, setAvailableOwners] = useState<any[]>([]);
+  const [isLoadingOwners, setIsLoadingOwners] = useState(false);
+
+  useEffect(() => {
+    if (open && user?.id) {
+      loadOwners();
+    }
+  }, [open, user?.id]);
+
+  const loadOwners = async () => {
+    setIsLoadingOwners(true);
+    try {
+      const owners = await mockApi.getOwners(user.id);
+      setAvailableOwners(owners);
+    } catch (error) {
+      console.error("Failed to load owners:", error);
+    } finally {
+      setIsLoadingOwners(false);
+    }
+  };
 
   const resetForm = () => {
     setPropertyName("");
@@ -35,7 +58,7 @@ export const RegisterPropertyDialog = ({ open, onOpenChange, onSuccess }: Regist
     setCoOwners([]);
     setIsAddingCoOwner(false);
     setEditingCoOwnerId(null);
-    setCoOwnerEmail("");
+    setSelectedOwnerId("");
     setCoOwnerWeight("");
   };
 
@@ -55,7 +78,7 @@ export const RegisterPropertyDialog = ({ open, onOpenChange, onSuccess }: Regist
   };
 
   const handleSaveCoOwner = () => {
-    if (!coOwnerEmail || !coOwnerWeight) {
+    if (!selectedOwnerId || !coOwnerWeight) {
       toast({
         title: t('properties.error'),
         description: t('properties.fillAllFields'),
@@ -74,30 +97,33 @@ export const RegisterPropertyDialog = ({ open, onOpenChange, onSuccess }: Regist
       return;
     }
 
+    const selectedOwner = availableOwners.find(o => o.id.toString() === selectedOwnerId);
+    if (!selectedOwner) return;
+
     if (editingCoOwnerId) {
       setCoOwners(coOwners.map(co => 
         co.id === editingCoOwnerId 
-          ? { ...co, email: coOwnerEmail, weight } 
+          ? { ...co, id: selectedOwner.id.toString(), email: selectedOwner.email, weight } 
           : co
       ));
       setEditingCoOwnerId(null);
     } else {
       const newCoOwner: CoOwner = {
-        id: Math.random().toString(36).substr(2, 9),
-        email: coOwnerEmail,
+        id: selectedOwner.id.toString(),
+        email: selectedOwner.email,
         weight,
       };
       setCoOwners([...coOwners, newCoOwner]);
     }
 
-    setCoOwnerEmail("");
+    setSelectedOwnerId("");
     setCoOwnerWeight("");
     setIsAddingCoOwner(false);
   };
 
   const handleEditCoOwner = (coOwner: CoOwner) => {
     setEditingCoOwnerId(coOwner.id);
-    setCoOwnerEmail(coOwner.email);
+    setSelectedOwnerId(coOwner.id);
     setCoOwnerWeight(coOwner.weight.toString());
     setIsAddingCoOwner(true);
   };
@@ -229,58 +255,67 @@ export const RegisterPropertyDialog = ({ open, onOpenChange, onSuccess }: Regist
                   </div>
                 )}
 
-                {isAddingCoOwner ? (
-                  <div className="space-y-4 p-4 border rounded-lg bg-background">
-                    <div className="space-y-2">
-                      <Label htmlFor="coOwnerEmail">{t('properties.coOwnerEmail')}</Label>
-                      <Input
-                        id="coOwnerEmail"
-                        type="email"
-                        value={coOwnerEmail}
-                        onChange={(e) => setCoOwnerEmail(e.target.value)}
-                        placeholder={t('properties.coOwnerEmailPlaceholder')}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="coOwnerWeight">{t('properties.coOwnerWeight')}</Label>
-                      <Input
-                        id="coOwnerWeight"
-                        type="number"
-                        min="0"
-                        max="100"
-                        step="0.01"
-                        value={coOwnerWeight}
-                        onChange={(e) => setCoOwnerWeight(e.target.value)}
-                        placeholder={t('properties.coOwnerWeightPlaceholder')}
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <Button onClick={handleSaveCoOwner}>
-                        {t('common.save')}
-                      </Button>
-                      <Button
-                        variant="outline"
-                        onClick={() => {
-                          setIsAddingCoOwner(false);
-                          setEditingCoOwnerId(null);
-                          setCoOwnerEmail("");
-                          setCoOwnerWeight("");
-                        }}
-                      >
-                        {t('common.cancel')}
-                      </Button>
-                    </div>
+              {isAddingCoOwner && (
+                <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
+                  <div className="space-y-2">
+                    <Label htmlFor="coOwnerSelect">{t('properties.coOwner')}</Label>
+                    <Select
+                      value={selectedOwnerId}
+                      onValueChange={setSelectedOwnerId}
+                      disabled={isLoadingOwners}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('properties.selectOwner')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {availableOwners.map((owner) => (
+                          <SelectItem key={owner.id} value={owner.id.toString()}>
+                            {owner.name} ({owner.email})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
-                ) : (
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => setIsAddingCoOwner(true)}
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    {t('properties.addCoOwner')}
-                  </Button>
-                )}
+                  <div className="space-y-2">
+                    <Label htmlFor="coOwnerWeight">{t('properties.coOwnerWeight')}</Label>
+                    <Input
+                      id="coOwnerWeight"
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="0.01"
+                      value={coOwnerWeight}
+                      onChange={(e) => setCoOwnerWeight(e.target.value)}
+                      placeholder={t('properties.coOwnerWeightPlaceholder')}
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <Button onClick={handleSaveCoOwner}>
+                      {t('common.save')}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setIsAddingCoOwner(false);
+                        setEditingCoOwnerId(null);
+                        setSelectedOwnerId("");
+                        setCoOwnerWeight("");
+                      }}
+                    >
+                      {t('common.cancel')}
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => setIsAddingCoOwner(true)}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                {t('properties.addCoOwner')}
+              </Button>
               </CardContent>
             </Card>
 

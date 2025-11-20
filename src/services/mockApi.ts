@@ -214,6 +214,23 @@ export const mockApi = {
     }
   },
 
+  getOwners: async (userId: string): Promise<any[]> => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/owners/${userId}`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch owners");
+      }
+
+      const result = await response.json();
+      return result.data || [];
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
   createProperty: async (data: {
     name: string;
     location: string;

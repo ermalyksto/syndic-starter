@@ -4,7 +4,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Plus, Edit, Trash2, FileUp, X } from "lucide-react";
@@ -12,6 +11,7 @@ import { toast } from "@/hooks/use-toast";
 import { mockApi } from "@/services/mockApi";
 import { Switch } from "@/components/ui/switch";
 import { AgendaItem, Assembly } from "@/types";
+import { useAppSelector } from "@/store/hooks";
 
 // interface AgendaItem {
 //   id: string;
@@ -25,29 +25,20 @@ interface CreateAssemblyDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSuccess: () => void;
-  assembly?: Assembly
-  // assembly?: {
-  //   id: string;
-  //   title: string;
-  //   buildingLocation?: string;
-  //   date: string;
-  //   time: string;
-  //   agendaItems?: AgendaItem[];
-  // };
+  assembly?: Assembly;
+  propertyLocation?: string;
 }
 
-const BUILDING_LOCATIONS = [
-  "ул. Витоша 15, София",
-  "бул. Цар Борис III 125, София",
-  "ул. Граф Игнатиев 88, Пловдив",
-  "бул. Мария Луиза 23, Варна",
-  "ул. Христо Ботев 45, Бургас"
-];
-
-export const CreateAssemblyDialog = ({ open, onOpenChange, onSuccess, assembly }: CreateAssemblyDialogProps) => {
+export const CreateAssemblyDialog = ({ 
+  open, 
+  onOpenChange, 
+  onSuccess, 
+  assembly,
+  propertyLocation 
+}: CreateAssemblyDialogProps) => {
   const { t } = useTranslation();
+  const { selectedPropertyId } = useAppSelector((state) => state.property);
   const [title, setTitle] = useState("");
-  const [buildingLocation, setBuildingLocation] = useState("");
   const [endDate, setEndDate] = useState("");
   const [agendaItems, setAgendaItems] = useState<AgendaItem[]>([]);
   const [showAgendaForm, setShowAgendaForm] = useState(false);
@@ -62,13 +53,11 @@ export const CreateAssemblyDialog = ({ open, onOpenChange, onSuccess, assembly }
   useEffect(() => {
     if (assembly && open) {
       setTitle(assembly.title);
-      setBuildingLocation(assembly.buildingLocation || "");
       setEndDate(assembly.date);
       setAgendaItems(assembly.agendaItems || []);
     } else if (!open) {
       // Reset form when dialog closes
       setTitle("");
-      setBuildingLocation("");
       setEndDate("");
       setAgendaItems([]);
       setCurrentDescription("");
@@ -181,10 +170,19 @@ export const CreateAssemblyDialog = ({ open, onOpenChange, onSuccess, assembly }
   };
 
   const handleCreate = async () => {
-    if (!title || !buildingLocation || !endDate) {
+    if (!title || !endDate) {
       toast({
         title: t("createAssembly.error"),
         description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!propertyLocation) {
+      toast({
+        title: t("createAssembly.error"),
+        description: t("properties.selectProperty"),
         variant: "destructive",
       });
       return;
@@ -204,7 +202,7 @@ export const CreateAssemblyDialog = ({ open, onOpenChange, onSuccess, assembly }
         // Update existing assembly
         await mockApi.updateAssembly(assembly.id, {
           title,
-          buildingLocation,
+          buildingLocation: propertyLocation,
           date: endDate,
           agendaItems: agendaItems,
         });
@@ -216,7 +214,7 @@ export const CreateAssemblyDialog = ({ open, onOpenChange, onSuccess, assembly }
         // Create new assembly
         await mockApi.createAssembly({
           title,
-          buildingLocation,
+          buildingLocation: propertyLocation,
           date: endDate,
           agendaItems: agendaItems,
         });
@@ -261,21 +259,14 @@ export const CreateAssemblyDialog = ({ open, onOpenChange, onSuccess, assembly }
           </div>
 
           {/* Building Location */}
-          <div className="space-y-2">
-            <Label>{t("createAssembly.buildingLocation")}</Label>
-            <Select value={buildingLocation} onValueChange={setBuildingLocation}>
-              <SelectTrigger>
-                <SelectValue placeholder={t("createAssembly.selectLocation")} />
-              </SelectTrigger>
-              <SelectContent>
-                {BUILDING_LOCATIONS.map((location) => (
-                  <SelectItem key={location} value={location}>
-                    {location}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {propertyLocation && (
+            <div className="space-y-2">
+              <Label>{t("createAssembly.buildingLocation")}</Label>
+              <div className="p-3 bg-muted rounded-md text-sm">
+                {propertyLocation}
+              </div>
+            </div>
+          )}
 
           {/* Start and End Dates */}
           <div className="grid grid-cols-2 gap-4">
