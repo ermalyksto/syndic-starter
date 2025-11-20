@@ -1,15 +1,15 @@
 import { User } from "@/store/slices/authSlice";
-import {Assembly, AssemblyStatus} from "@/types";
+import {AgendaItem, Assembly, AssemblyStatus} from "@/types";
 
 // export type AssemblyStatus = "draft" | "active" | "completed";
 
-export interface AgendaItem {
-  id: string;
-  description: string;
-  votingOption?: "yes" | "no" | "abstained";
-  customVotingOptions?: string[];
-  files?: File[];
-}
+// export interface AgendaItem {
+//   id: string;
+//   description: string;
+//   votingOption?: "yes" | "no" | "abstained";
+//   customVotingOptions?: string[];
+//   files?: File[];
+// }
 
 // export interface Assembly {
 //   id: string;
@@ -133,10 +133,10 @@ export const mockApi = {
     title: string;
     buildingLocation: string;
     date: string;
-    time: string;
     agendaItems: AgendaItem[];
   }): Promise<Assembly> => {
     try {
+      console.log("Items", data)
       const response = await fetch(`${API_BASE_URL}/assemblies`, {
         method: "POST",
         headers: {
@@ -161,7 +161,6 @@ export const mockApi = {
       title: string;
       buildingLocation: string;
       date: string;
-      time: string;
       agendaItems: AgendaItem[];
     }
   ): Promise<Assembly> => {

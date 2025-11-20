@@ -10,10 +10,12 @@ export interface Assembly {
   agendaItems: AgendaItem[];
   voted?: boolean;
 }
-interface AgendaItem {
+export interface AgendaItem {
   id: string;
   description: string;
   customVotingOptions?: string [];
+  votingOption?: "yes" | "no" | "abstained";
+  files?: File[];
 }
 export enum AssemblyStatus{
   DRAFT = "draft",

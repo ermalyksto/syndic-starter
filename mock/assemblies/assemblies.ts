@@ -6,7 +6,12 @@ import { coownerId } from "../constants";
 import { Assembly } from "../../src/types";
 
 export const assemblies: MockOptions = [
-      {
+  {
+    url: "/api/assemblies",
+    method: "POST",
+    body: {created: true}
+  },
+  {
     url: "/api/assemblies/user/:id",
     body: (req) => {
       const { id } = req.params;

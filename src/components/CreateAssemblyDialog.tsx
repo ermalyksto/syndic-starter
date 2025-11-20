@@ -11,27 +11,29 @@ import { Plus, Edit, Trash2, FileUp, X } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { mockApi } from "@/services/mockApi";
 import { Switch } from "@/components/ui/switch";
+import { AgendaItem, Assembly } from "@/types";
 
-interface AgendaItem {
-  id: string;
-  description: string;
-  votingOption?: "yes" | "no" | "abstained";
-  customVotingOptions?: string[];
-  files?: File[];
-}
+// interface AgendaItem {
+//   id: string;
+//   description: string;
+//   votingOption?: "yes" | "no" | "abstained";
+//   customVotingOptions?: string[];
+//   files?: File[];
+// }
 
 interface CreateAssemblyDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSuccess: () => void;
-  assembly?: {
-    id: string;
-    title: string;
-    buildingLocation?: string;
-    date: string;
-    time: string;
-    agendaItems?: AgendaItem[];
-  };
+  assembly?: Assembly
+  // assembly?: {
+  //   id: string;
+  //   title: string;
+  //   buildingLocation?: string;
+  //   date: string;
+  //   time: string;
+  //   agendaItems?: AgendaItem[];
+  // };
 }
 
 const BUILDING_LOCATIONS = [
@@ -46,7 +48,6 @@ export const CreateAssemblyDialog = ({ open, onOpenChange, onSuccess, assembly }
   const { t } = useTranslation();
   const [title, setTitle] = useState("");
   const [buildingLocation, setBuildingLocation] = useState("");
-  const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [agendaItems, setAgendaItems] = useState<AgendaItem[]>([]);
   const [showAgendaForm, setShowAgendaForm] = useState(false);
@@ -62,14 +63,12 @@ export const CreateAssemblyDialog = ({ open, onOpenChange, onSuccess, assembly }
     if (assembly && open) {
       setTitle(assembly.title);
       setBuildingLocation(assembly.buildingLocation || "");
-      setStartDate(assembly.date);
       setEndDate(assembly.date);
       setAgendaItems(assembly.agendaItems || []);
     } else if (!open) {
       // Reset form when dialog closes
       setTitle("");
       setBuildingLocation("");
-      setStartDate("");
       setEndDate("");
       setAgendaItems([]);
       setCurrentDescription("");
@@ -182,7 +181,7 @@ export const CreateAssemblyDialog = ({ open, onOpenChange, onSuccess, assembly }
   };
 
   const handleCreate = async () => {
-    if (!title || !buildingLocation || !startDate || !endDate) {
+    if (!title || !buildingLocation || !endDate) {
       toast({
         title: t("createAssembly.error"),
         description: "Please fill in all required fields",
@@ -206,9 +205,8 @@ export const CreateAssemblyDialog = ({ open, onOpenChange, onSuccess, assembly }
         await mockApi.updateAssembly(assembly.id, {
           title,
           buildingLocation,
-          date: startDate,
-          time: endDate,
-          agendaItems: agendaItems as any,
+          date: endDate,
+          agendaItems: agendaItems,
         });
 
         toast({
@@ -219,9 +217,8 @@ export const CreateAssemblyDialog = ({ open, onOpenChange, onSuccess, assembly }
         await mockApi.createAssembly({
           title,
           buildingLocation,
-          date: startDate,
-          time: endDate,
-          agendaItems: agendaItems as any,
+          date: endDate,
+          agendaItems: agendaItems,
         });
 
         toast({
@@ -282,15 +279,6 @@ export const CreateAssemblyDialog = ({ open, onOpenChange, onSuccess, assembly }
 
           {/* Start and End Dates */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="startDate">{t("createAssembly.startDate")}</Label>
-              <Input
-                id="startDate"
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-            </div>
             <div className="space-y-2">
               <Label htmlFor="endDate">{t("createAssembly.endDate")}</Label>
               <Input
