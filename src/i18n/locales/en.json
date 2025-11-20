@@ -88,7 +88,9 @@
     "invalidEmail": "Please enter a valid email address",
     "failedToDelegate": "Failed to delegate your vote. Please try again.",
     "successTitle": "Delegation Successful",
-    "successMessage": "Vote delegated successfully to {{email}}"
+    "successMessage": "Vote delegated successfully to {{email}}",
+    "selectOwner": "Co-owner",
+    "selectOwnerPlaceholder": "Select co-owner"
   },
   "owners": {
     "title": "Owners",
@@ -188,6 +190,9 @@
     "weight": "Weight",
     "totalWeight": "Total Weight",
     "noProperties": "No registered properties",
+    "allProperties": "All properties",
+    "selectProperty": "Select property",
+    "property": "Property",
     "more": "more",
     "success": "Success",
     "registered": "Property registered successfully",
