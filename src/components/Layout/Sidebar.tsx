@@ -21,13 +21,13 @@ export const Sidebar = ({ isMobileOpen = false, onMobileClose }: SidebarProps) =
   const syndicNavigation = [
     { name: t('nav.dashboard'), href: "/", icon: Building2 },
     { name: t('nav.owners'), href: "/owners", icon: Users },
-    { name: t('nav.properties'), href: "/properties", icon: Building2 },
     { name: t('nav.finances'), href: "/finances", icon: DollarSign },
     { name: t('nav.assemblies'), href: "/assemblies", icon: Calendar },
     { name: t('nav.proxies'), href: "/proxies", icon: FileCheck },
     { name: t('nav.maintenance'), href: "/maintenance", icon: Wrench },
     { name: t('nav.documents'), href: "/documents", icon: FileText },
     { name: t('nav.signatures'), href: "/signatures", icon: ShieldCheck },
+    { name: t('nav.properties'), href: "/properties", icon: Building2 },
   ];
 
   const coOwnerNavigation = [
