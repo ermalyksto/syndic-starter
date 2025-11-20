@@ -112,7 +112,7 @@
     "syndicAccount": "Compte syndic",
     "coOwnerAccount": "Compte copropriétaire",
     "propertyManagement": "Gestion de copropriété",
-    "emailLogin": "Connexion par e-mail",
+    "qrLogin": "Connexion par QR",
     "passwordLogin": "Connexion par mot de passe",
     "submit": "Soumettre",
     "scanQrCode": "Scannez le code QR pour vous connecter",

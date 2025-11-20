@@ -112,7 +112,7 @@
     "syndicAccount": "Синдик акаунт",
     "coOwnerAccount": "Собственик акаунт",
     "propertyManagement": "Управление на етажна собственост",
-    "emailLogin": "Вход с имейл",
+    "qrLogin": "Вход с QR код",
     "passwordLogin": "Вход с парола",
     "submit": "Изпрати",
     "scanQrCode": "Сканирайте QR кода за вход",

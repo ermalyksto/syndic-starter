@@ -112,7 +112,7 @@
     "syndicAccount": "Syndic Account",
     "coOwnerAccount": "Co-Owner Account",
     "propertyManagement": "Property Management",
-    "emailLogin": "Email Login",
+    "qrLogin": "QR Login",
     "passwordLogin": "Password Login",
     "submit": "Submit",
     "scanQrCode": "Scan the QR code to login",

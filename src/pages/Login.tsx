@@ -12,10 +12,10 @@ import { Building2, Copy, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { QRCodeSVG } from 'qrcode.react';
 
-type LoginType = 'email' | 'password';
+type LoginType = 'qr' | 'password';
 
 const Login = () => {
-  const [loginType, setLoginType] = useState<LoginType>('email');
+  const [loginType, setLoginType] = useState<LoginType>('qr');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -150,17 +150,17 @@ const Login = () => {
                   <Button
                     type="button"
                     role="tab"
-                    aria-selected={loginType === 'email'}
+                    aria-selected={loginType === 'qr'}
                     aria-controls="email-panel"
                     variant="ghost"
                     className={`px-6 py-2 rounded-md transition-all ${
-                      loginType === 'email'
+                      loginType === 'qr'
                         ? 'bg-background text-foreground shadow-sm'
                         : 'text-muted-foreground hover:text-foreground'
                     }`}
-                    onClick={() => setLoginType('email')}
+                    onClick={() => setLoginType('qr')}
                   >
-                    {t('auth.emailLogin')}
+                    {t('auth.qrLogin')}
                   </Button>
                   <Button
                     type="button"
@@ -180,19 +180,13 @@ const Login = () => {
                 </div>
               </div>
 
-              {loginType === 'email' ? (
+              {loginType === 'qr' ? (
                 <form onSubmit={handleEmailLogin} className="space-y-4" id="email-panel" role="tabpanel">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">{t('auth.email')}</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="email@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                    />
-                  </div>
+              {/* <div className="flex flex-col items-center space-y-4">
+                <p className="text-sm font-medium text-foreground text-center">
+                  {t('auth.walletAuth')}
+                </p>
+              </div> */}
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? `${t('common.loading')}...` : t('auth.submit')}
                   </Button>
