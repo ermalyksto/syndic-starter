@@ -10,26 +10,22 @@ import {
   Mail,
   ChevronDown,
   ChevronUp,
+  UserCheck,
+  Loader2,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Assembly, AssemblyStatus, UserRole } from "@/types";
-
-// interface AgendaItem {
-//   description: string;
-// }
-
-// interface Assembly {
-//   id: string;
-//   title: string;
-//   status: "draft" | "active" | "completed";
-//   date: string;
-//   time: string;
-//   participantsCount: number;
-//   delegatedOwnersCount?: number;
-//   buildingLocation?: string;
-//   agendaItems?: AgendaItem[];
-//   voted?: boolean;
-// }
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 
 interface AssemblyCardProps {
   assembly: Assembly;
@@ -38,6 +34,7 @@ interface AssemblyCardProps {
   onDelete?: (assembly: Assembly) => void;
   onNavigate?: (assemblyId: string) => void;
   onInvite?: (assemblyId: string) => void;
+  onRefresh?: () => void;
   sendingInvites?: boolean;
 }
 
@@ -48,10 +45,16 @@ export const AssemblyCard = ({
   onDelete,
   onNavigate,
   onInvite,
+  onRefresh,
   sendingInvites = false,
 }: AssemblyCardProps) => {
   const { t } = useTranslation();
+  const { toast } = useToast();
   const [agendaExpanded, setAgendaExpanded] = useState(false);
+  const [showDelegateDialog, setShowDelegateDialog] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [delegateEmail, setDelegateEmail] = useState("");
+  const [isDelegating, setIsDelegating] = useState(false);
 
   const getStatusBadge = (status: Assembly["status"]) => {
     const variants = {
@@ -76,129 +79,256 @@ export const AssemblyCard = ({
     );
   };
 
-  return (
-    <div className="p-4 bg-muted rounded-lg hover:bg-muted/80 transition-colors">
-      <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
-        <div className="flex-1 space-y-2">
-          <div className="flex items-start gap-3 flex-wrap">
-            <h3 className="font-semibold text-foreground">{assembly.title}</h3>
-            {getStatusBadge(assembly.status)}
-          </div>
-          <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <Calendar className="h-4 w-4" />
-              <span>
-                {assembly.date} в {assembly.time}
-              </span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Users className="h-4 w-4" />
-              <span>
-                {assembly.participantsCount} {t("dashboard.participants")}
-              </span>
-            </div>
-            {assembly.delegatedOwnersCount !== undefined && (
-              <div className="flex items-center gap-1">
-                <FileText className="h-4 w-4" />
-                <span>
-                  {assembly.delegatedOwnersCount} {t("dashboard.delegated")}
-                </span>
-              </div>
-            )}
-            {assembly.buildingLocation && (
-              <div className="flex items-center gap-1">
-                <FileText className="h-4 w-4" />
-                <span>{assembly.buildingLocation}</span>
-              </div>
-            )}
-          </div>
+  const handleDelegateClick = () => {
+    setDelegateEmail("");
+    setShowDelegateDialog(true);
+  };
 
-          {/* Agenda Items Section */}
-          {assembly.agendaItems && assembly.agendaItems.length > 0 && (
-            <div className="pt-2">
-              <button
-                onClick={() => setAgendaExpanded(!agendaExpanded)}
-                className="flex items-center gap-2 text-sm font-medium text-primary hover:underline cursor-pointer"
-              >
-                {agendaExpanded ? (
-                  <ChevronUp className="h-4 w-4" />
-                ) : (
-                  <ChevronDown className="h-4 w-4" />
-                )}
+  const handleDelegateSubmit = async () => {
+    if (!delegateEmail || !delegateEmail.includes("@")) {
+      toast({
+        title: t("delegation.error"),
+        description: t("delegation.invalidEmail"),
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsDelegating(true);
+
+    try {
+      const response = await fetch(`/api/assemblies/${assembly.id}/delegate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: delegateEmail }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delegate vote");
+      }
+
+      setShowDelegateDialog(false);
+      setShowSuccessDialog(true);
+    } catch (error) {
+      toast({
+        title: t("delegation.error"),
+        description: t("delegation.failedToDelegate"),
+        variant: "destructive",
+      });
+    } finally {
+      setIsDelegating(false);
+    }
+  };
+
+  const handleSuccessDialogClose = () => {
+    setShowSuccessDialog(false);
+    onRefresh?.();
+  };
+
+  return (
+    <>
+      <div className="p-4 bg-muted rounded-lg hover:bg-muted/80 transition-colors">
+        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+          <div className="flex-1 space-y-2">
+            <div className="flex items-start gap-3 flex-wrap">
+              <h3 className="font-semibold text-foreground">{assembly.title}</h3>
+              {getStatusBadge(assembly.status)}
+            </div>
+            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <Calendar className="h-4 w-4" />
                 <span>
-                  Дневен ред ({assembly.agendaItems.length} точки)
+                  {assembly.date} {t("common.at")} {assembly.time}
                 </span>
-              </button>
-              
-              {agendaExpanded && (
-                <ul className="mt-3 space-y-2 pl-6">
-                  {assembly.agendaItems.map((item, idx) => (
-                    <li
-                      key={idx}
-                      className="text-sm text-foreground flex items-start gap-2"
-                    >
-                      <span className="text-primary font-medium flex-shrink-0">
-                        {idx + 1}.
-                      </span>
-                      <span className="text-muted-foreground">
-                        {item.description}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+              </div>
+              <div className="flex items-center gap-1">
+                <Users className="h-4 w-4" />
+                <span>
+                  {assembly.participantsCount} {t("dashboard.participants")}
+                </span>
+              </div>
+              {assembly.delegatedOwnersCount !== undefined && (
+                <div className="flex items-center gap-1">
+                  <FileText className="h-4 w-4" />
+                  <span>
+                    {assembly.delegatedOwnersCount} {t("dashboard.delegated")}
+                  </span>
+                </div>
+              )}
+              {assembly.buildingLocation && (
+                <div className="flex items-center gap-1">
+                  <FileText className="h-4 w-4" />
+                  <span>{assembly.buildingLocation}</span>
+                </div>
               )}
             </div>
-          )}
-        </div>
 
-        <div className="flex gap-2 flex-wrap lg:flex-shrink-0">
-          {userRole === "syndic" && assembly.status === "draft" && (
-            <>
-              <Button
-                variant="default"
-                size="sm"
-                onClick={() => onManage?.(assembly)}
-              >
-                <Settings className="h-4 w-4 mr-2" />
-                {t("dashboard.manage")}
-              </Button>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => onDelete?.(assembly)}
-              >
-                <Trash2 className="h-4 w-4 mr-2" />
-                {t("common.delete")}
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => onInvite?.(assembly.id)}
-                disabled={sendingInvites}
-              >
-                <Mail className="h-4 w-4 mr-2" />
-                {sendingInvites ? t("dashboard.sending") : t("dashboard.invite")}
-              </Button>
-            </>
-          )}
-          {userRole === UserRole.COOWNER && assembly.status === AssemblyStatus.ACTIVE && !assembly.voted && (
-            <Button size="sm" onClick={() => onNavigate?.(assembly.id)}>
-              Гласувай
-            </Button>
-          )}
-          {userRole === UserRole.COOWNER && assembly.status === AssemblyStatus.COMPLETED && (
-            <Button size="sm" onClick={() => {}}>
-              Протокол
+            {/* Agenda Items Section */}
+            {assembly.agendaItems && assembly.agendaItems.length > 0 && (
+              <div className="pt-2">
+                <button
+                  onClick={() => setAgendaExpanded(!agendaExpanded)}
+                  className="flex items-center gap-2 text-sm font-medium text-primary hover:underline cursor-pointer"
+                >
+                  {agendaExpanded ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
+                  <span>
+                    {t("assemblies.agenda")} ({assembly.agendaItems.length} {t("assemblies.items")})
+                  </span>
+                </button>
+                
+                {agendaExpanded && (
+                  <ul className="mt-3 space-y-2 pl-6">
+                    {assembly.agendaItems.map((item, idx) => (
+                      <li
+                        key={idx}
+                        className="text-sm text-foreground flex items-start gap-2"
+                      >
+                        <span className="text-primary font-medium flex-shrink-0">
+                          {idx + 1}.
+                        </span>
+                        <span className="text-muted-foreground">
+                          {item.description}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="flex gap-2 flex-wrap lg:flex-shrink-0">
+            {userRole === "syndic" && assembly.status === "draft" && (
+              <>
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={() => onManage?.(assembly)}
+                >
+                  <Settings className="h-4 w-4 mr-2" />
+                  {t("dashboard.manage")}
+                </Button>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => onDelete?.(assembly)}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  {t("common.delete")}
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => onInvite?.(assembly.id)}
+                  disabled={sendingInvites}
+                >
+                  <Mail className="h-4 w-4 mr-2" />
+                  {sendingInvites ? t("dashboard.sending") : t("dashboard.invite")}
+                </Button>
+              </>
+            )}
+            {userRole === UserRole.COOWNER && assembly.status === AssemblyStatus.ACTIVE && !assembly.voted && (
+              <>
+                <Button size="sm" onClick={() => onNavigate?.(assembly.id)}>
+                  {t("assemblies.vote")}
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={handleDelegateClick}
+                >
+                  <UserCheck className="h-4 w-4 mr-2" />
+                  {t("assemblies.delegate")}
+                </Button>
+              </>
+            )}
+            {userRole === UserRole.COOWNER && assembly.status === AssemblyStatus.COMPLETED && (
+              <Button size="sm" onClick={() => {}}>
+                {t("assemblies.protocol")}
               </Button>
             )}
-          {userRole === "syndic" && (
+            {userRole === "syndic" && (
               <Button variant="outline" size="sm">
                 <FileText className="h-4 w-4 mr-2" />
                 {t("dashboard.eventLog")}
               </Button>
             )}
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Delegate Dialog */}
+      <Dialog open={showDelegateDialog} onOpenChange={setShowDelegateDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{t("delegation.title")}</DialogTitle>
+            <DialogDescription>
+              {t("delegation.description")}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="email" className="text-right">
+                {t("delegation.email")}
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                value={delegateEmail}
+                onChange={(e) => setDelegateEmail(e.target.value)}
+                className="col-span-3"
+                placeholder={t("delegation.emailPlaceholder")}
+                disabled={isDelegating}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setShowDelegateDialog(false)}
+              disabled={isDelegating}
+            >
+              {t("common.cancel")}
+            </Button>
+            <Button 
+              onClick={handleDelegateSubmit}
+              disabled={isDelegating}
+            >
+              {isDelegating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {t("delegation.delegating")}
+                </>
+              ) : (
+                t("delegation.delegateButton")
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Success Dialog */}
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{t("delegation.successTitle")}</DialogTitle>
+            <DialogDescription>
+              {t("delegation.successMessage", { email: delegateEmail })}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={handleSuccessDialogClose}>
+              {t("common.ok")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };

@@ -11,7 +11,9 @@
     "update": "Mettre à jour",
     "loading": "Chargement...",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "ok": "OK",
+    "at": "à"
   },
   "nav": {
     "dashboard": "Tableau de bord",
@@ -23,7 +25,7 @@
     "maintenance": "Maintenance",
     "documents": "Documents",
     "signatures": "Signatures",
-    "myEvents": "Mes événements",
+    "myEvents": "Mes évènements",
     "myPayments": "Mes paiements"
   },
   "dashboard": {
@@ -44,18 +46,49 @@
     },
     "participants": "participants",
     "delegated": "délégués",
-    "eventLog": "Journal des événements",
+    "eventLog": "Journal des évènements",
     "manage": "Modifier",
     "invite": "Inviter",
+    "sending": "Envoi...",
+    "inviteSuccessMessage": "Les invitations ont été envoyées aux participants.",
     "quickActions": "Actions rapides",
     "delegateVote": "Déléguer le vote",
-    "viewEvents": "Voir les événements",
+    "viewEvents": "Voir les évènements",
     "payFees": "Payer les frais",
     "signDocuments": "Signer les documents",
-    "upcomingEvents": "Événements à venir",
+    "upcomingEvents": "Évènements à venir",
     "outstandingPayments": "Paiements en attente",
     "activeProxies": "Procurations actives",
     "pendingSignatures": "Signatures en attente"
+  },
+  "assemblies": {
+    "title": "Assemblées",
+    "vote": "Voter",
+    "delegate": "Déléguer",
+    "protocol": "Protocole",
+    "agenda": "Ordre du jour",
+    "items": "points",
+    "noAssemblies": "Aucune assemblée disponible",
+    "digitalAssembly": "Assemblée entièrement numérique",
+    "qesSignature": "Signature électronique qualifiée (QES)",
+    "qesDescription": "Équivalent juridique à la signature manuscrite",
+    "proxySystem": "Système de procuration",
+    "proxyDescription": "Délégation numérique avec vérification",
+    "qerdsCommunication": "Communication QERDS",
+    "qerdsDescription": "Livraison garantie des invitations et protocoles"
+  },
+  "delegation": {
+    "title": "Déléguer le vote",
+    "description": "Entrez l'adresse email de la personne à qui vous souhaitez déléguer votre vote pour cette assemblée.",
+    "email": "Email",
+    "emailPlaceholder": "exemple@email.com",
+    "delegateButton": "Déléguer",
+    "delegating": "Délégation...",
+    "error": "Erreur",
+    "invalidEmail": "Veuillez entrer une adresse email valide",
+    "failedToDelegate": "Impossible de déléguer votre vote. Veuillez réessayer.",
+    "successTitle": "Délégation réussie",
+    "successMessage": "Vote délégué avec succès à {{email}}"
   },
   "owners": {
     "title": "Propriétaires",

@@ -9,34 +9,41 @@ import signatureImage from "@/assets/signature-icon.jpg";
 import { mockApi } from "@/services/mockApi";
 import { AssemblyCard } from "./AssemblyCard";
 import { Assembly } from "@/types";
+import { useTranslation } from "react-i18next";
 
 const Assemblies = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { user } = useAppSelector((state) => state.auth);
   const [assemblies, setAssemblies] = useState<Assembly[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const fetchAssemblies = async () => {
+    setIsLoading(true);
+    try {
+      // const response = await fetch("/api/assemblies");
+      const data = await mockApi.getAssemblies(user.id);
+
+      // const data = await response.json();
+      // const data = await response;
+      setAssemblies(data);
+    } catch (error) {
+      console.error("Failed to fetch assemblies:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchAssemblies = async () => {
-      try {
-        // const response = await fetch("/api/assemblies");
-        const data = await mockApi.getAssemblies(user.id);
-
-        // const data = await response.json();
-        // const data = await response;
-        setAssemblies(data);
-      } catch (error) {
-        console.error("Failed to fetch assemblies:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchAssemblies();
   }, [user]);
 
   const handleNavigateToVote = (assemblyId: string) => {
     navigate(`/assemblies/${assemblyId}/vote`);
+  };
+
+  const handleRefresh = () => {
+    fetchAssemblies();
   };
 
   return (
@@ -55,35 +62,35 @@ const Assemblies = () => {
             </div>
             <div className="p-8 flex flex-col justify-center">
               <h3 className="text-2xl font-bold text-foreground mb-4">
-                Напълно дигитално събрание
+                {t("assemblies.digitalAssembly")}
               </h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                   <div>
                     <span className="font-medium">
-                      Квалифициран електронен подпис (QES)
+                      {t("assemblies.qesSignature")}
                     </span>
                     <p className="text-sm text-muted-foreground">
-                      Правно еквивалентен на ръкописен подпис
+                      {t("assemblies.qesDescription")}
                     </p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                   <div>
-                    <span className="font-medium">Система за пълномощни</span>
+                    <span className="font-medium">{t("assemblies.proxySystem")}</span>
                     <p className="text-sm text-muted-foreground">
-                      Дигитално делегиране с верификация
+                      {t("assemblies.proxyDescription")}
                     </p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                   <div>
-                    <span className="font-medium">QERDS комуникация</span>
+                    <span className="font-medium">{t("assemblies.qerdsCommunication")}</span>
                     <p className="text-sm text-muted-foreground">
-                      Гарантирана доставка на покани и протоколи
+                      {t("assemblies.qerdsDescription")}
                     </p>
                   </div>
                 </li>
@@ -95,10 +102,10 @@ const Assemblies = () => {
         {/* Assemblies List */}
         <div className="space-y-4">
           {isLoading ? (
-            <p className="text-center text-muted-foreground">Зареждане...</p>
+            <p className="text-center text-muted-foreground">{t("common.loading")}</p>
           ) : assemblies.length === 0 ? (
             <p className="text-center text-muted-foreground">
-              Няма налични събрания
+              {t("assemblies.noAssemblies")}
             </p>
           ) : (
             assemblies.map((assembly) => (
@@ -107,6 +114,7 @@ const Assemblies = () => {
                 assembly={assembly}
                 userRole={user?.role}
                 onNavigate={handleNavigateToVote}
+                onRefresh={handleRefresh}
               />
             ))
           )}

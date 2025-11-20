@@ -12,7 +12,8 @@
     "loading": "Зареждане...",
     "yes": "Да",
     "no": "Не",
-    "ok": "OK"
+    "ok": "OK",
+    "at": "в"
   },
   "nav": {
     "dashboard": "Табло",
@@ -48,6 +49,7 @@
     "eventLog": "Лог със събития",
     "manage": "Редактирай",
     "invite": "Покани",
+    "sending": "Изпращане...",
     "inviteSuccessMessage": "Поканите са изпратени успешно.",
     "quickActions": "Бързи действия",
     "delegateVote": "Делегирай глас",
@@ -58,6 +60,35 @@
     "outstandingPayments": "Неплатени задължения",
     "activeProxies": "Активни пълномощни",
     "pendingSignatures": "Документи за подпис"
+  },
+  "assemblies": {
+    "title": "Общи събрания",
+    "vote": "Гласувай",
+    "delegate": "Делегирай",
+    "protocol": "Протокол",
+    "agenda": "Дневен ред",
+    "items": "точки",
+    "noAssemblies": "Няма налични събрания",
+    "digitalAssembly": "Напълно дигитално събрание",
+    "qesSignature": "Квалифициран електронен подпис (QES)",
+    "qesDescription": "Правно еквивалентен на ръкописен подпис",
+    "proxySystem": "Система за пълномощни",
+    "proxyDescription": "Дигитално делегиране с верификация",
+    "qerdsCommunication": "QERDS комуникация",
+    "qerdsDescription": "Гарантирана доставка на покани и протоколи"
+  },
+  "delegation": {
+    "title": "Делегиране на глас",
+    "description": "Въведете имейл адреса на лицето, на което искате да делегирате вашия глас за това събрание.",
+    "email": "Имейл",
+    "emailPlaceholder": "example@email.com",
+    "delegateButton": "Делегирай",
+    "delegating": "Делегиране...",
+    "error": "Грешка",
+    "invalidEmail": "Моля, въведете валиден имейл адрес",
+    "failedToDelegate": "Не можахме да делегираме вашия глас. Моля, опитайте отново.",
+    "successTitle": "Успешно делегиране",
+    "successMessage": "Гласът е делегиран успешно на {{email}}"
   },
   "owners": {
     "title": "Собственици",

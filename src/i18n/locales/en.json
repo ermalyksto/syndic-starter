@@ -12,7 +12,8 @@
     "loading": "Loading...",
     "yes": "Yes",
     "no": "No",
-    "ok": "OK"
+    "ok": "OK",
+    "at": "at"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -48,6 +49,7 @@
     "eventLog": "Event Log",
     "manage": "Edit",
     "invite": "Invite",
+    "sending": "Sending...",
     "inviteSuccessMessage": "Invitations have been sent to the participants in the meeting.",
     "quickActions": "Quick Actions",
     "delegateVote": "Delegate Vote",
@@ -58,6 +60,35 @@
     "outstandingPayments": "Outstanding Payments",
     "activeProxies": "Active Proxies",
     "pendingSignatures": "Pending Signatures"
+  },
+  "assemblies": {
+    "title": "Assemblies",
+    "vote": "Vote",
+    "delegate": "Delegate",
+    "protocol": "Protocol",
+    "agenda": "Agenda",
+    "items": "items",
+    "noAssemblies": "No assemblies available",
+    "digitalAssembly": "Fully Digital Assembly",
+    "qesSignature": "Qualified Electronic Signature (QES)",
+    "qesDescription": "Legally equivalent to handwritten signature",
+    "proxySystem": "Proxy System",
+    "proxyDescription": "Digital delegation with verification",
+    "qerdsCommunication": "QERDS Communication",
+    "qerdsDescription": "Guaranteed delivery of invitations and protocols"
+  },
+  "delegation": {
+    "title": "Delegate Vote",
+    "description": "Enter the email address of the person you want to delegate your vote to for this assembly.",
+    "email": "Email",
+    "emailPlaceholder": "example@email.com",
+    "delegateButton": "Delegate",
+    "delegating": "Delegating...",
+    "error": "Error",
+    "invalidEmail": "Please enter a valid email address",
+    "failedToDelegate": "Failed to delegate your vote. Please try again.",
+    "successTitle": "Delegation Successful",
+    "successMessage": "Vote delegated successfully to {{email}}"
   },
   "owners": {
     "title": "Owners",

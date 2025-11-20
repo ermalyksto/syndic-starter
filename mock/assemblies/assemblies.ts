@@ -41,5 +41,10 @@ export const assemblies: MockOptions = [
     url: "/api/assemblies/:id/vote",
     method: "POST",
     body: {}
+  },
+    {
+    url: "/api/assemblies/:id/delegate",
+    method: "POST",
+    body: {}
   }
 ]
