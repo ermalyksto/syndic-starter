@@ -8,6 +8,7 @@
     "participantsCount": 0,
     "delegatedOwnersCount": 0,
     "buildingLocation": "ул. Витоша 15, София",
+    "propertyId": "prop-1",
     "agendaItems": [
       {
         "id": "1",
@@ -34,6 +35,7 @@
     "participantsCount": 45,
     "delegatedOwnersCount": 12,
     "buildingLocation": "бул. Цар Борис III 125, София",
+    "propertyId": "prop-1",
     "agendaItems": [
       {
         "id": "1",
@@ -51,6 +53,7 @@
     "participantsCount": 67,
     "delegatedOwnersCount": 23,
     "buildingLocation": "ул. Граф Игнатиев 88, Пловдив",
+    "propertyId": "prop-2",
     "agendaItems": []
   },
   {
@@ -62,6 +65,7 @@
     "participantsCount": 89,
     "delegatedOwnersCount": 31,
     "buildingLocation": "бул. Мария Луиза 23, Варна",
+    "propertyId": "prop-2",
     "agendaItems": []
   }
 ]

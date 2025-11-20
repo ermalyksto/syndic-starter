@@ -18,6 +18,7 @@ import Documents from "./pages/Documents";
 import Signatures from "./pages/Signatures";
 import NotFound from "./pages/NotFound";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { UserRole } from "./types";
 
 const queryClient = new QueryClient();
 
@@ -50,7 +51,7 @@ const App = () => (
           <Route
             path="/owners"
             element={
-              <ProtectedRoute allowedRoles={['syndic']}>
+              <ProtectedRoute allowedRoles={[UserRole.SYNDIC]}>
                 <Owners />
               </ProtectedRoute>
             }
@@ -58,7 +59,7 @@ const App = () => (
           <Route
             path="/properties"
             element={
-              <ProtectedRoute allowedRoles={['syndic']}>
+              <ProtectedRoute allowedRoles={[UserRole.SYNDIC]}>
                 <Properties />
               </ProtectedRoute>
             }
@@ -82,7 +83,7 @@ const App = () => (
           <Route
             path="/finances"
             element={
-              <ProtectedRoute allowedRoles={['syndic']}>
+              <ProtectedRoute allowedRoles={[UserRole.SYNDIC]}>
                 <Finances />
               </ProtectedRoute>
             }
@@ -98,7 +99,7 @@ const App = () => (
           <Route
             path="/maintenance"
             element={
-              <ProtectedRoute allowedRoles={['syndic']}>
+              <ProtectedRoute allowedRoles={[UserRole.SYNDIC]}>
                 <Maintenance />
               </ProtectedRoute>
             }

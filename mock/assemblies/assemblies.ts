@@ -47,9 +47,20 @@ export const assemblies: MockOptions = [
     method: "POST",
     body: {}
   },
-    {
+  {
     url: "/api/assemblies/:id/delegate",
     method: "POST",
     body: {}
+  },
+  {
+    url: "/api/assemblies/user/:id/property/:propertyId",
+    method: "GET",
+    body: (req) => {
+      const { id, propertyId } = req.params;
+      const meetings = id == coownerId ? coowner_meetings : syndic_meetings;
+      const assembliesArray = meetings as Assembly[];
+      const filteredAssemblies = assembliesArray.filter((a) => a.propertyId === propertyId);
+      return filteredAssemblies;
+    },
   }
 ]
