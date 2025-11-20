@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -23,9 +23,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { mockApi } from "@/services/mockApi";
+import { useAppSelector } from "@/store/hooks";
 
 interface AssemblyCardProps {
   assembly: Assembly;
@@ -50,11 +52,32 @@ export const AssemblyCard = ({
 }: AssemblyCardProps) => {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const { user } = useAppSelector((state) => state.auth);
   const [agendaExpanded, setAgendaExpanded] = useState(false);
   const [showDelegateDialog, setShowDelegateDialog] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-  const [delegateEmail, setDelegateEmail] = useState("");
+  const [selectedDelegateId, setSelectedDelegateId] = useState("");
   const [isDelegating, setIsDelegating] = useState(false);
+  const [availableOwners, setAvailableOwners] = useState<any[]>([]);
+  const [isLoadingOwners, setIsLoadingOwners] = useState(false);
+
+  useEffect(() => {
+    if (showDelegateDialog && user?.id) {
+      loadOwners();
+    }
+  }, [showDelegateDialog, user?.id]);
+
+  const loadOwners = async () => {
+    setIsLoadingOwners(true);
+    try {
+      const owners = await mockApi.getOwners(user.id);
+      setAvailableOwners(owners);
+    } catch (error) {
+      console.error("Failed to load owners:", error);
+    } finally {
+      setIsLoadingOwners(false);
+    }
+  };
 
   const getStatusBadge = (status: Assembly["status"]) => {
     const variants = {
@@ -80,19 +103,22 @@ export const AssemblyCard = ({
   };
 
   const handleDelegateClick = () => {
-    setDelegateEmail("");
+    setSelectedDelegateId("");
     setShowDelegateDialog(true);
   };
 
   const handleDelegateSubmit = async () => {
-    if (!delegateEmail || !delegateEmail.includes("@")) {
+    if (!selectedDelegateId) {
       toast({
         title: t("delegation.error"),
-        description: t("delegation.invalidEmail"),
+        description: t("delegation.selectOwner"),
         variant: "destructive",
       });
       return;
     }
+
+    const selectedOwner = availableOwners.find(o => o.id.toString() === selectedDelegateId);
+    if (!selectedOwner) return;
 
     setIsDelegating(true);
 
@@ -102,7 +128,7 @@ export const AssemblyCard = ({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: delegateEmail }),
+        body: JSON.stringify({ email: selectedOwner.email }),
       });
 
       if (!response.ok) {
@@ -265,27 +291,32 @@ export const AssemblyCard = ({
 
       {/* Delegate Dialog */}
       <Dialog open={showDelegateDialog} onOpenChange={setShowDelegateDialog}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>{t("delegation.title")}</DialogTitle>
             <DialogDescription>
               {t("delegation.description")}
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                {t("delegation.email")}
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                value={delegateEmail}
-                onChange={(e) => setDelegateEmail(e.target.value)}
-                className="col-span-3"
-                placeholder={t("delegation.emailPlaceholder")}
-                disabled={isDelegating}
-              />
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="delegateSelect">{t("delegation.selectOwner")}</Label>
+              <Select
+                value={selectedDelegateId}
+                onValueChange={setSelectedDelegateId}
+                disabled={isDelegating || isLoadingOwners}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={t("delegation.selectOwnerPlaceholder")} />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableOwners.map((owner) => (
+                    <SelectItem key={owner.id} value={owner.id.toString()}>
+                      {owner.name} ({owner.email})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
           <DialogFooter>
@@ -319,7 +350,9 @@ export const AssemblyCard = ({
           <DialogHeader>
             <DialogTitle>{t("delegation.successTitle")}</DialogTitle>
             <DialogDescription>
-              {t("delegation.successMessage", { email: delegateEmail })}
+              {t("delegation.successMessage", { 
+                email: availableOwners.find(o => o.id.toString() === selectedDelegateId)?.email || "" 
+              })}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
