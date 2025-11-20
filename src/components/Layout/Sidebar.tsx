@@ -1,9 +1,10 @@
-import { Building2, Users, DollarSign, Calendar, FileCheck, Wrench, FileText, ShieldCheck, LogOut } from "lucide-react";
+import { Building2, Users, DollarSign, Calendar, FileCheck, Wrench, FileText, ShieldCheck, LogOut, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "@/components/NavLink";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useTranslation } from "react-i18next";
 
@@ -57,6 +58,18 @@ export const Sidebar = ({ isMobileOpen = false, onMobileClose }: SidebarProps) =
         <h1 className="text-2xl font-bold text-sidebar-primary">PropManager</h1>
         <p className="text-sm text-muted-foreground mt-1">Управление на имоти</p>
       </div>
+
+      {user?.role === 'syndic' && (
+        <div className="p-4 border-b border-sidebar-border">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input 
+              placeholder={t('common.search')}
+              className="pl-10"
+            />
+          </div>
+        </div>
+      )}
       
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
         {navigation.map((item) => (

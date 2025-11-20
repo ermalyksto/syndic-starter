@@ -1,13 +1,23 @@
-import { Bell, Search, Menu, Languages } from "lucide-react";
+import { Bell, Menu, Languages, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useTranslation } from "react-i18next";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { setSelectedProperty } from "@/store/slices/propertySlice";
+import { useState, useEffect } from "react";
+import { mockApi, Property } from "@/services/mockApi";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -15,9 +25,23 @@ interface HeaderProps {
 
 export const Header = ({ onMenuClick }: HeaderProps) => {
   const { t, i18n } = useTranslation();
+  const { user } = useAppSelector((state) => state.auth);
+  const { selectedPropertyId } = useAppSelector((state) => state.property);
+  const dispatch = useAppDispatch();
+  const [properties, setProperties] = useState<Property[]>([]);
+
+  useEffect(() => {
+    if (user?.role === 'syndic' && user?.id) {
+      mockApi.getProperties(user.id).then(setProperties).catch(console.error);
+    }
+  }, [user]);
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
+  };
+
+  const handlePropertyChange = (value: string) => {
+    dispatch(setSelectedProperty(value === 'all' ? null : value));
   };
 
   const languages = [
@@ -36,15 +60,28 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
       >
         <Menu className="h-5 w-5" />
       </Button>
-      <div className="flex items-center gap-4 flex-1 max-w-xl">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input 
-            placeholder={t('common.search')}
-            className="pl-10"
-          />
+      
+      {user?.role === 'syndic' && (
+        <div className="flex items-center gap-4 flex-1 max-w-xs">
+          <Select 
+            value={selectedPropertyId || 'all'} 
+            onValueChange={handlePropertyChange}
+          >
+            <SelectTrigger className="w-full">
+              <Building2 className="h-4 w-4 mr-2" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{t('properties.allProperties') || 'All properties'}</SelectItem>
+              {properties.map((property) => (
+                <SelectItem key={property.id} value={property.id}>
+                  {property.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
-      </div>
+      )}
       
       <div className="flex items-center gap-3">
         <DropdownMenu>

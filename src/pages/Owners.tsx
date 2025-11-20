@@ -31,6 +31,7 @@ const Owners = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const { user } = useAppSelector((state) => state.auth);
+  const { selectedPropertyId } = useAppSelector((state) => state.property);
   const [owners, setOwners] = useState<Owner[]>([]);
   const [filteredOwners, setFilteredOwners] = useState<Owner[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +45,7 @@ const Owners = () => {
 
   useEffect(() => {
     fetchOwners();
-  }, [user?.id]);
+  }, [user?.id, selectedPropertyId]);
 
   useEffect(() => {
     // Filter owners based on search term
@@ -70,7 +71,10 @@ const Owners = () => {
 
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/owners/${user.id}`);
+      const url = selectedPropertyId 
+        ? `/api/owners/${user.id}/property/${selectedPropertyId}`
+        : `/api/owners/${user.id}`;
+      const response = await fetch(url);
       
       if (!response.ok) {
         throw new Error("Failed to fetch owners");

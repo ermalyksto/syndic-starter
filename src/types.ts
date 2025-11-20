@@ -9,6 +9,7 @@ export interface Assembly {
   buildingLocation: string;
   agendaItems: AgendaItem[];
   voted?: boolean;
+  propertyId: string;
 }
 export interface AgendaItem {
   id: string;

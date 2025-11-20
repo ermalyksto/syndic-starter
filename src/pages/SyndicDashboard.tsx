@@ -36,14 +36,21 @@ const SyndicDashboard = () => {
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
   const [sendingInvites, setSendingInvites] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
+  const { selectedPropertyId } = useAppSelector((state) => state.property);
   const { t } = useTranslation();
 
   const loadData = async () => {
     try {
-      const [assembliesData, statsData] = await Promise.all([
-        mockApi.getAssemblies(user.email),
-        mockApi.getAssemblyStats(),
-      ]);
+      const url = selectedPropertyId
+        ? `/api/assemblies/user/${user.email}/property/${selectedPropertyId}`
+        : `/api/assemblies/user/${user.email}`;
+      
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Failed to fetch assemblies");
+      const assembliesData = await response.json();
+      
+      const statsData = await mockApi.getAssemblyStats();
+      
       setAssemblies(assembliesData);
       setStats(statsData);
     } catch (error) {
@@ -55,7 +62,7 @@ const SyndicDashboard = () => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [selectedPropertyId]);
 
   const handleAssemblyCreated = () => {
     loadData();
