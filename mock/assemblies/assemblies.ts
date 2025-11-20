@@ -16,7 +16,7 @@ export const assemblies: MockOptions = [
     body: (req) => {
       const { id } = req.params;
       const meetings =
-        id == coownerId ? coowner_meetings : syndic_meetings;
+        id === coownerId ? coowner_meetings : syndic_meetings;
       return meetings;
     },
   },
@@ -57,7 +57,7 @@ export const assemblies: MockOptions = [
     method: "GET",
     body: (req) => {
       const { id, propertyId } = req.params;
-      const meetings = id == coownerId ? coowner_meetings : syndic_meetings;
+      const meetings = id === coownerId ? coowner_meetings : syndic_meetings;
       const assembliesArray = meetings as Assembly[];
       const filteredAssemblies = assembliesArray.filter((a) => a.propertyId === propertyId);
       return filteredAssemblies;

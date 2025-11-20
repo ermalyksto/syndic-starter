@@ -3,7 +3,7 @@ import { StatCard } from "@/components/Dashboard/StatCard";
 import { Plus, Users, Calendar, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { mockApi, AssemblyStats } from "@/services/mockApi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslation } from "react-i18next";
@@ -39,11 +39,11 @@ const SyndicDashboard = () => {
   const { selectedPropertyId } = useAppSelector((state) => state.property);
   const { t } = useTranslation();
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const url = selectedPropertyId
-        ? `/api/assemblies/user/${user.email}/property/${selectedPropertyId}`
-        : `/api/assemblies/user/${user.email}`;
+        ? `/api/assemblies/user/${user.id}/property/${selectedPropertyId}`
+        : `/api/assemblies/user/${user.id}`;
       
       const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch assemblies");
@@ -58,11 +58,11 @@ const SyndicDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedPropertyId, user.id]);
 
   useEffect(() => {
     loadData();
-  }, [selectedPropertyId]);
+  }, [selectedPropertyId, loadData]);
 
   const handleAssemblyCreated = () => {
     loadData();
