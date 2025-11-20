@@ -12,27 +12,28 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Assembly, AssemblyStatus, UserRole } from "@/types";
 
-interface AgendaItem {
-  description: string;
-}
+// interface AgendaItem {
+//   description: string;
+// }
 
-interface Assembly {
-  id: string;
-  title: string;
-  status: "draft" | "active" | "completed";
-  date: string;
-  time: string;
-  participantsCount: number;
-  delegatedOwnersCount?: number;
-  buildingLocation?: string;
-  agendaItems?: AgendaItem[];
-  voted?: boolean;
-}
+// interface Assembly {
+//   id: string;
+//   title: string;
+//   status: "draft" | "active" | "completed";
+//   date: string;
+//   time: string;
+//   participantsCount: number;
+//   delegatedOwnersCount?: number;
+//   buildingLocation?: string;
+//   agendaItems?: AgendaItem[];
+//   voted?: boolean;
+// }
 
 interface AssemblyCardProps {
   assembly: Assembly;
-  userRole?: "syndic" | "co-owner";
+  userRole?: UserRole;
   onManage?: (assembly: Assembly) => void;
   onDelete?: (assembly: Assembly) => void;
   onNavigate?: (assemblyId: string) => void;
@@ -180,12 +181,12 @@ export const AssemblyCard = ({
               </Button>
             </>
           )}
-          {userRole === "co-owner" && assembly.status === "active" && !assembly.voted && (
+          {userRole === UserRole.COOWNER && assembly.status === AssemblyStatus.ACTIVE && !assembly.voted && (
             <Button size="sm" onClick={() => onNavigate?.(assembly.id)}>
               Гласувай
             </Button>
           )}
-          {userRole === "co-owner" && assembly.status === "completed" && (
+          {userRole === UserRole.COOWNER && assembly.status === AssemblyStatus.COMPLETED && (
             <Button size="sm" onClick={() => {}}>
               Протокол
               </Button>

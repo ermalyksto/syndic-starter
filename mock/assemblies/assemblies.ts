@@ -3,7 +3,7 @@ import coowner_meetings from "./coowner_GET.json";
 import syndic_meetings from "./syndic_GET.json";
 import stats from "./stats_GET.json";
 import { coownerId } from "../constants";
-import { Assembly } from "../types";
+import { Assembly } from "../../src/types";
 
 export const assemblies: MockOptions = [
       {
@@ -37,4 +37,9 @@ export const assemblies: MockOptions = [
       return assembly;
     },
   },
+  {
+    url: "/api/assemblies/:id/vote",
+    method: "POST",
+    body: {}
+  }
 ]

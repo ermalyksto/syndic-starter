@@ -4,7 +4,7 @@ import { Plus, Users, Calendar, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { mockApi, Assembly, AssemblyStats } from "@/services/mockApi";
+import { mockApi, AssemblyStats } from "@/services/mockApi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslation } from "react-i18next";
 import { CreateAssemblyDialog } from "@/components/CreateAssemblyDialog";
@@ -21,6 +21,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { useAppSelector } from "@/store/hooks";
 import { AssemblyCard } from "./AssemblyCard";
+import { Assembly } from "@/types";
 
 const SyndicDashboard = () => {
   const [assemblies, setAssemblies] = useState<Assembly[]>([]);

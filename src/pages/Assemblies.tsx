@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, Plus } from "lucide-react";
 import { useAppSelector } from "@/store/hooks";
 import signatureImage from "@/assets/signature-icon.jpg";
-import { Assembly, mockApi } from "@/services/mockApi";
+import { mockApi } from "@/services/mockApi";
 import { AssemblyCard } from "./AssemblyCard";
+import { Assembly } from "@/types";
 
 const Assemblies = () => {
   const navigate = useNavigate();

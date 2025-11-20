@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { UserRole } from '@/types';
 
-export type UserRole = 'syndic' | 'co-owner';
+// export type UserRole = 'syndic' | 'co-owner';
 
 export interface User {
   id: string;

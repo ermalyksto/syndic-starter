@@ -5,8 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { Download, Calendar, MapPin } from 'lucide-react';
+import { Download, Calendar, MapPin, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface AgendaItem {
   id: string;
@@ -31,7 +39,9 @@ const VotingPage = () => {
   const { toast } = useToast();
   const [assembly, setAssembly] = useState<Assembly | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [votes, setVotes] = useState<Record<string, string>>({});
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   useEffect(() => {
     const fetchAssembly = async () => {
@@ -61,10 +71,12 @@ const VotingPage = () => {
   }, [assemblyID, navigate, toast]);
 
   const handleVoteChange = (itemId: string, value: string) => {
+    // Prevent changes while submitting
+    if (isSubmitting) return;
     setVotes((prev) => ({ ...prev, [itemId]: value }));
   };
 
-  const handleSubmitVote = () => {
+  const handleSubmitVote = async () => {
     // Check if all items have been voted on
     const allItemsVoted = assembly?.agendaItems.every((item) => votes[item.id]);
     
@@ -77,12 +89,35 @@ const VotingPage = () => {
       return;
     }
 
-    // Submit votes (mock implementation)
-    toast({
-      title: 'Успешно гласуване',
-      description: 'Вашият глас е регистриран успешно',
-    });
-    
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(`/api/assemblies/${assemblyID}/vote`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ votes }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit vote');
+      }
+
+      // Show success dialog
+      setShowSuccessDialog(true);
+    } catch (error) {
+      toast({
+        title: 'Грешка',
+        description: 'Не можахме да регистрираме вашия глас. Моля, опитайте отново.',
+        variant: 'destructive',
+      });
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSuccessDialogClose = () => {
+    setShowSuccessDialog(false);
     navigate('/assemblies');
   };
 
@@ -131,7 +166,7 @@ const VotingPage = () => {
             const votingOptions = getVotingOptions(item);
             
             return (
-              <Card key={item.id} className="shadow-card">
+              <Card key={item.id} className={`shadow-card ${isSubmitting ? 'opacity-60' : ''}`}>
                 <CardHeader>
                   <CardTitle className="text-lg">
                     Точка {index + 1}: {item.description}
@@ -150,6 +185,7 @@ const VotingPage = () => {
                             variant="outline"
                             size="sm"
                             className="gap-2"
+                            disabled={isSubmitting}
                             onClick={() => window.open(doc.url, '_blank')}
                           >
                             <Download className="h-4 w-4" />
@@ -168,13 +204,18 @@ const VotingPage = () => {
                       <RadioGroup
                         value={votes[item.id]}
                         onValueChange={(value) => handleVoteChange(item.id, value)}
+                        disabled={isSubmitting}
                       >
                         {votingOptions.map((option, idx) => (
                           <div key={idx} className="flex items-center space-x-2">
-                            <RadioGroupItem value={option} id={`${item.id}-${idx}`} />
+                            <RadioGroupItem 
+                              value={option} 
+                              id={`${item.id}-${idx}`}
+                              disabled={isSubmitting}
+                            />
                             <Label
                               htmlFor={`${item.id}-${idx}`}
-                              className="cursor-pointer"
+                              className={`cursor-pointer ${isSubmitting ? 'cursor-not-allowed' : ''}`}
                             >
                               {option}
                             </Label>
@@ -190,17 +231,46 @@ const VotingPage = () => {
         </div>
 
         <div className="flex justify-end gap-4">
-          <Button variant="outline" onClick={() => navigate('/assemblies')}>
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/assemblies')}
+            disabled={isSubmitting}
+          >
             Отказ
           </Button>
           <Button
             onClick={handleSubmitVote}
-            className="bg-gradient-to-r from-primary to-accent"
+            disabled={isSubmitting}
+            className="bg-gradient-to-r from-primary to-accent min-w-[120px]"
           >
-            Гласувай
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Изпращане...
+              </>
+            ) : (
+              'Гласувай'
+            )}
           </Button>
         </div>
       </div>
+
+      {/* Success Dialog */}
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Успешно гласуване</DialogTitle>
+            <DialogDescription>
+              Благодарим ви за вашия глас!
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={handleSuccessDialogClose}>
+              OK
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </MainLayout>
   );
 };

@@ -1,6 +1,7 @@
 import { User } from "@/store/slices/authSlice";
+import {Assembly, AssemblyStatus} from "@/types";
 
-export type AssemblyStatus = "draft" | "active" | "completed";
+// export type AssemblyStatus = "draft" | "active" | "completed";
 
 export interface AgendaItem {
   id: string;
@@ -10,17 +11,17 @@ export interface AgendaItem {
   files?: File[];
 }
 
-export interface Assembly {
-  id: string;
-  title: string;
-  status: AssemblyStatus;
-  date: string;
-  time: string;
-  participantsCount: number;
-  delegatedOwnersCount: number;
-  buildingLocation?: string;
-  agendaItems?: AgendaItem[];
-}
+// export interface Assembly {
+//   id: string;
+//   title: string;
+//   status: AssemblyStatus;
+//   date: string;
+//   time: string;
+//   participantsCount: number;
+//   delegatedOwnersCount: number;
+//   buildingLocation?: string;
+//   agendaItems?: AgendaItem[];
+// }
 
 export interface AssemblyStats {
   totalAssemblies: number;
