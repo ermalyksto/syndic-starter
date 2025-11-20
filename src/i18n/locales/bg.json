@@ -102,7 +102,13 @@
     "contact": "Контакт",
     "apartment": "Апартамент",
     "quota": "Квота",
-    "status": "Статус"
+    "status": "Статус",
+    "statusActive": "Активен",
+    "statusPending": "Чакащ",
+    "error": "Грешка",
+    "loadError": "Грешка при зареждане на собствениците",
+    "noOwners": "Няма регистрирани собственици",
+    "noSearchResults": "Няма намерени резултати"
   },
   "auth": {
     "login": "Вход",

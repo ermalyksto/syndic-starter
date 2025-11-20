@@ -102,7 +102,13 @@
     "contact": "Contact",
     "apartment": "Appartement",
     "quota": "Quote-part",
-    "status": "Statut"
+    "status": "Statut",
+    "statusActive": "Actif",
+    "statusPending": "En attente",
+    "error": "Erreur",
+    "loadError": "Erreur de chargement des propriétaires",
+    "noOwners": "Aucun propriétaire enregistré",
+    "noSearchResults": "Aucun résultat trouvé"
   },
   "auth": {
     "login": "Connexion",

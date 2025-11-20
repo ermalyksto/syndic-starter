@@ -102,7 +102,13 @@
     "contact": "Contact",
     "apartment": "Apartment",
     "quota": "Quota",
-    "status": "Status"
+    "status": "Status",
+    "statusActive": "Active",
+    "statusPending": "Pending",
+    "error": "Error",
+    "loadError": "Error loading owners",
+    "noOwners": "No registered owners",
+    "noSearchResults": "No results found"
   },
   "auth": {
     "login": "Login",
