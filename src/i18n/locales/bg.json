@@ -11,7 +11,8 @@
     "update": "Актуализирай",
     "loading": "Зареждане...",
     "yes": "Да",
-    "no": "Не"
+    "no": "Не",
+    "ok": "OK"
   },
   "nav": {
     "dashboard": "Табло",
@@ -47,6 +48,7 @@
     "eventLog": "Лог със събития",
     "manage": "Редактирай",
     "invite": "Покани",
+    "inviteSuccessMessage": "Поканите са изпратени успешно.",
     "quickActions": "Бързи действия",
     "delegateVote": "Делегирай глас",
     "viewEvents": "Виж събития",

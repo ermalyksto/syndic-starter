@@ -74,16 +74,17 @@ const SyndicDashboard = () => {
   const handleInviteClick = async (assemblyId: string) => {
     setSendingInvites(true);
     try {
-      // const response = await fetch(`/api/invitations/${assemblyId}`, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      // });
+      console.log("Send request", assemblyId);
+      const response = await fetch(`/api/invitations/${assemblyId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-      // if (!response.ok) {
-      //   throw new Error('Failed to send invitations');
-      // }
+      if (!response.ok) {
+        throw new Error('Failed to send invitations');
+      }
 
       setInviteDialogOpen(true);
     } catch (error) {
@@ -241,9 +242,9 @@ const SyndicDashboard = () => {
         <AlertDialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>{t("dashboard.inviteSuccess")}</AlertDialogTitle>
+              <AlertDialogTitle>{t("dashboard.invite")}</AlertDialogTitle>
               <AlertDialogDescription>
-                Invitations have been sent to the participants in the meeting.
+                {t("dashboard.inviteSuccessMessage")}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
