@@ -3,6 +3,7 @@ import { auth } from "./auth/auth";
 import { assemblies } from "./assemblies/assemblies";
 import properties from "./properties/_GET.json";
 import owners from "./owners.json";
+import invitations from "./invitations/_GET.json";
 
 export default defineMock([
   ...auth,
@@ -11,6 +12,35 @@ export default defineMock([
     url: "/api/invitations/:assemblyId",
     method: "POST",
     body: { invitationsSent: true },
+  },
+  {
+    url: "/api/invitations/:id",
+    method: "GET",
+    body: (req) => {
+      const invitationId = req.params.id || req.params[0];
+      console.log("Fetching invitation:", invitationId);
+      
+      // Find the invitation by ID
+      const invitation = invitations.find(inv => inv.id === invitationId);
+      
+      if (!invitation) {
+        return {
+          success: false,
+          error: "Invitation not found"
+        };
+      }
+      
+      return {
+        success: true,
+        data: {
+          id: invitation.id,
+          assembly: invitation.assembly,
+          senderName: invitation.senderName,
+          createdAt: new Date().toISOString(),
+          status: "pending"
+        }
+      };
+    }
   },
   {
     url: "/api/properties/:id",
