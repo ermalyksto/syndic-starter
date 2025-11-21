@@ -1,11 +1,11 @@
 {
   "id": "5",
-  "title": "Nouvelle assemblée",
+  "title": "Ново събрание",
   "status": "draft",
   "date": "2025-02-15",
   "time": "18:00",
   "participantsCount": 0,
   "delegatedOwnersCount": 0,
-  "buildingLocation": "15 rue Vitoche, Sofia",
+  "buildingLocation": "ул. Витоша 15, София",
   "agendaItems": []
 }

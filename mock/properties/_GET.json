@@ -1,22 +1,22 @@
 [
   {
     "id": "1",
-    "name": "Жилищна сграда - ул. Витоша 15",
-    "location": "София, бул. Витоша 15",
+    "name": "Immeuble résidentiel - 15 rue Vitoche",
+    "location": "Sofia, 15 bd Vitoche",
     "coOwners": [
-      { "id": "1", "email": "owner1@test.com", "weight": 30 },
-      { "id": "2", "email": "owner2@test.com", "weight": 45 },
-      { "id": "3", "email": "owner3@test.com", "weight": 25 }
+      { "id": "1", "email": "proprietaire1@test.com", "weight": 30 },
+      { "id": "2", "email": "proprietaire2@test.com", "weight": 45 },
+      { "id": "3", "email": "proprietaire3@test.com", "weight": 25 }
     ]
   },
   {
     "id": "2",
-    "name": "Лозенец, блок 1",
-    "location": "София, квартал Лозенец",
+    "name": "Lozenets, bloc 1",
+    "location": "Sofia, quartier Lozenets",
     "coOwners": [
-      { "id": "1", "email": "owner1@test.com", "weight": 40 },
-      { "id": "2", "email": "owner2@test.com", "weight": 35 },
-      { "id": "3", "email": "owner3@test.com", "weight": 25 }
+      { "id": "1", "email": "proprietaire1@test.com", "weight": 40 },
+      { "id": "2", "email": "proprietaire2@test.com", "weight": 35 },
+      { "id": "3", "email": "proprietaire3@test.com", "weight": 25 }
     ]
   }
 ]

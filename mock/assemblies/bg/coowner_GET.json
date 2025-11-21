@@ -1,0 +1,93 @@
+[
+  {
+    "id": "1",
+    "title": "Годишно общо събрание 2025",
+    "status": "active",
+    "voted": false,
+    "date": "2025-01-15",
+    "time": "18:00",
+    "participantsCount": 0,
+    "delegatedOwnersCount": 0,
+    "buildingLocation": "ул. Витоша 15, София",
+    "propertyId": "1",
+    "agendaItems": [
+      {
+        "id": "1",
+        "description": "Приемане на годишен финансов отчет",
+        "votingOption": "yes"
+      },
+      {
+        "id": "2",
+        "description": "Одобряване на бюджет за 2025",
+        "customVotingOptions": [
+          "Одобрявам",
+          "Не одобрявам",
+          "Предлагам промени"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "title": "Извънредно събрание - Ремонт на покрив",
+    "status": "active",
+    "voted": true,
+    "date": "2024-12-20",
+    "time": "19:00",
+    "participantsCount": 45,
+    "delegatedOwnersCount": 12,
+    "buildingLocation": "бул. Цар Борис III 125, София",
+    "propertyId": "1",
+    "agendaItems": [
+      {
+        "id": "1",
+        "description": "Одобряване на оферта за ремонт на покрива",
+        "votingOption": "yes"
+      },
+      {
+        "id": "2",
+        "description": "Пешо събира за кола",
+        "customVotingOptions": [
+          "Одобрявам",
+          "Не одобрявам",
+          "Предлагам промени"
+        ]
+      },
+      {
+        "id": "3",
+        "description": "А пенка сади пипер",
+        "customVotingOptions": [
+          "Одобрявам",
+          "Не одобрявам",
+          "Предлагам промени"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "title": "Общо събрание Q3 2024",
+    "status": "completed",
+    "voted": false,
+    "date": "2024-09-10",
+    "time": "18:30",
+    "participantsCount": 67,
+    "delegatedOwnersCount": 23,
+    "buildingLocation": "ул. Граф Игнатиев 88, Пловдив",
+    "propertyId": "2",
+    "agendaItems": []
+  },
+  {
+    "id": "4",
+    "title": "Извънредно събрание - Избор на нов синдик",
+    "status": "completed",
+    "voted": true,
+    "date": "2024-06-15",
+    "time": "19:00",
+    "participantsCount": 89,
+    "delegatedOwnersCount": 31,
+    "buildingLocation": "бул. Мария Луиза 23, Варна",
+    "propertyId": "2",
+    "agendaItems": []
+  }
+]

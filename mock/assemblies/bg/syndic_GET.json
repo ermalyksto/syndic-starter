@@ -1,70 +1,70 @@
 [
   {
     "id": "1",
-    "title": "Assemblée générale annuelle 2025 ----- 1",
+    "title": "Годишно общо събрание 2025 ----- 1",
     "status": "draft",
     "date": "2025-01-15",
     "time": "18:00",
     "participantsCount": 0,
     "delegatedOwnersCount": 0,
-    "buildingLocation": "15 rue Vitoche, Sofia",
+    "buildingLocation": "ул. Витоша 15, София",
     "propertyId": "1",
     "agendaItems": [
       {
         "id": "1",
-        "description": "Adoption du rapport financier annuel",
+        "description": "Приемане на годишен финансов отчет",
         "votingOption": "yes"
       },
       {
         "id": "2",
-        "description": "Approbation du budget pour 2025",
+        "description": "Одобряване на бюджет за 2025",
         "customVotingOptions": [
-          "J'approuve",
-          "Je n'approuve pas",
-          "Je propose des modifications"
+          "Одобрявам",
+          "Не одобрявам",
+          "Предлагам промени"
         ]
       }
     ]
   },
   {
     "id": "2",
-    "title": "Assemblée extraordinaire - Réparation du toit",
+    "title": "Извънредно събрание - Ремонт на покрив",
     "status": "active",
     "date": "2024-12-20",
     "time": "19:00",
     "participantsCount": 45,
     "delegatedOwnersCount": 12,
-    "buildingLocation": "125 bd Tsar Boris III, Sofia",
+    "buildingLocation": "бул. Цар Борис III 125, София",
     "propertyId": "2",
     "agendaItems": [
       {
         "id": "1",
-        "description": "Approbation du devis pour la réparation du toit",
+        "description": "Одобряване на оферта за ремонт на покрива",
         "votingOption": "yes"
       }
     ]
   },
   {
     "id": "3",
-    "title": "Assemblée générale Q3 2024",
+    "title": "Общо събрание Q3 2024",
     "status": "completed",
     "date": "2024-09-10",
     "time": "18:30",
     "participantsCount": 67,
     "delegatedOwnersCount": 23,
-    "buildingLocation": "88 rue Graf Ignatiev, Plovdiv",
+    "buildingLocation": "ул. Граф Игнатиев 88, Пловдив",
     "propertyId": "2",
     "agendaItems": []
   },
   {
     "id": "4",
-    "title": "Assemblée extraordinaire - Élection d'un nouveau syndic",
+    "title": "Извънредно събрание - Избор на нов синдик",
     "status": "completed",
     "date": "2024-06-15",
     "time": "19:00",
     "participantsCount": 89,
     "delegatedOwnersCount": 31,
-    "buildingLocation": "23 bd Maria Luiza, Varna",
+    "buildingLocation": "бул. Мария Луиза 23, Варна",
     "propertyId": "1",
     "agendaItems": []
   }
