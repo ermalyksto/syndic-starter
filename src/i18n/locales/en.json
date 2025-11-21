@@ -205,5 +205,19 @@
     "weightMustBe100": "Total weight of co-owners must be exactly 100%",
     "cancelTitle": "Cancel Registration",
     "cancelDescription": "Are you sure you want to cancel? All entered data will be lost."
+  },
+  "invitation": {
+    "title": "Assembly Invitation",
+    "from": "From",
+    "message": "{{senderName}} invites you to participate in the upcoming assembly. Please review the details below and vote on the agenda items.",
+    "assemblyDetails": "Assembly Details",
+    "location": "Location",
+    "dateTime": "Date and Time",
+    "agendaItems": "Agenda Items",
+    "readyToVote": "Ready to vote?",
+    "proceedToVote": "Proceed to Vote",
+    "loadError": "Error loading invitation",
+    "notFound": "Invitation not found",
+    "goToLogin": "Go to Homepage"
   }
 }

@@ -7,6 +7,7 @@ import { useAppSelector } from "./store/hooks";
 import Login from "./pages/Login";
 import SyndicDashboard from "./pages/SyndicDashboard";
 import CoOwnerDashboard from "./pages/CoOwnerDashboard";
+import Invitation from "./pages/Invitation";
 import Owners from "./pages/Owners";
 import Properties from "./pages/Properties";
 import Assemblies from "./pages/Assemblies";
@@ -40,6 +41,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/invitations/:invitationId" element={<Invitation />} />
           <Route
             path="/"
             element={

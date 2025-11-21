@@ -200,5 +200,19 @@
     "weightMustBe100": "Le poids total des copropriétaires doit être exactement 100%",
     "cancelTitle": "Annuler l'enregistrement",
     "cancelDescription": "Êtes-vous sûr de vouloir annuler ? Toutes les données saisies seront perdues."
+  },
+  "invitation": {
+    "title": "Invitation à l'assemblée",
+    "from": "De",
+    "message": "{{senderName}} vous invite à participer à la prochaine assemblée. Veuillez examiner les détails ci-dessous et voter sur les points de l'ordre du jour.",
+    "assemblyDetails": "Détails de l'assemblée",
+    "location": "Emplacement",
+    "dateTime": "Date et heure",
+    "agendaItems": "Points de l'ordre du jour",
+    "readyToVote": "Prêt à voter?",
+    "proceedToVote": "Procéder au vote",
+    "loadError": "Erreur de chargement de l'invitation",
+    "notFound": "Invitation non trouvée",
+    "goToLogin": "Aller à la page d'accueil"
   }
 }
