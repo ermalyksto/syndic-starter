@@ -12,6 +12,7 @@ import {
   ChevronUp,
   UserCheck,
   Loader2,
+  CheckCircle,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Assembly, AssemblyStatus, UserRole } from "@/types";
@@ -60,6 +61,10 @@ export const AssemblyCard = ({
   const [isDelegating, setIsDelegating] = useState(false);
   const [availableOwners, setAvailableOwners] = useState<any[]>([]);
   const [isLoadingOwners, setIsLoadingOwners] = useState(false);
+  const [showFinalizeDialog, setShowFinalizeDialog] = useState(false);
+  const [showFinalizeSuccessDialog, setShowFinalizeSuccessDialog] = useState(false);
+  const [protocolFile, setProtocolFile] = useState<File | null>(null);
+  const [isFinalizing, setIsFinalizing] = useState(false);
 
   useEffect(() => {
     if (showDelegateDialog && user?.id) {
@@ -150,6 +155,61 @@ export const AssemblyCard = ({
 
   const handleSuccessDialogClose = () => {
     setShowSuccessDialog(false);
+    onRefresh?.();
+  };
+
+  const handleFinalizeClick = () => {
+    setProtocolFile(null);
+    setShowFinalizeDialog(true);
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setProtocolFile(file);
+    }
+  };
+
+  const handleFinalizeSubmit = async () => {
+    if (!protocolFile) {
+      toast({
+        title: t("finalize.error"),
+        description: t("finalize.noFile"),
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsFinalizing(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("protocol", protocolFile);
+
+      const response = await fetch(`/api/protocol/${assembly.id}`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to finalize assembly");
+      }
+
+      setShowFinalizeDialog(false);
+      setShowFinalizeSuccessDialog(true);
+    } catch (error) {
+      toast({
+        title: t("finalize.error"),
+        description: t("finalize.failedToFinalize"),
+        variant: "destructive",
+      });
+    } finally {
+      setIsFinalizing(false);
+    }
+  };
+
+  const handleFinalizeSuccessClose = () => {
+    setShowFinalizeSuccessDialog(false);
     onRefresh?.();
   };
 
@@ -259,6 +319,17 @@ export const AssemblyCard = ({
                 </Button>
               </>
             )}
+            {userRole === "syndic" && assembly.status === "active" && (
+              <Button
+                variant="default"
+                size="sm"
+                onClick={handleFinalizeClick}
+                className="bg-gradient-to-br from-primary to-accent hover:opacity-90"
+              >
+                <CheckCircle className="h-4 w-4 mr-2" />
+                {t("finalize.finalize")}
+              </Button>
+            )}
             {userRole === UserRole.COOWNER && assembly.status === AssemblyStatus.ACTIVE && !assembly.voted && (
               <>
                 <Button size="sm" onClick={() => onNavigate?.(assembly.id)}>
@@ -357,6 +428,76 @@ export const AssemblyCard = ({
           </DialogHeader>
           <DialogFooter>
             <Button onClick={handleSuccessDialogClose}>
+              {t("common.ok")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Finalize Dialog */}
+      <Dialog open={showFinalizeDialog} onOpenChange={setShowFinalizeDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("finalize.title")}</DialogTitle>
+            <DialogDescription>
+              {t("finalize.message")}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="protocolFile">{t("finalize.protocolFile")}</Label>
+              <input
+                id="protocolFile"
+                type="file"
+                accept=".pdf,.doc,.docx"
+                onChange={handleFileChange}
+                disabled={isFinalizing}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              />
+              {protocolFile && (
+                <p className="text-sm text-muted-foreground">
+                  {t("finalize.selectedFile")}: {protocolFile.name}
+                </p>
+              )}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setShowFinalizeDialog(false)}
+              disabled={isFinalizing}
+            >
+              {t("common.cancel")}
+            </Button>
+            <Button 
+              onClick={handleFinalizeSubmit}
+              disabled={isFinalizing}
+              className="bg-gradient-to-br from-primary to-accent hover:opacity-90"
+            >
+              {isFinalizing ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {t("finalize.finalizing")}
+                </>
+              ) : (
+                t("finalize.finalize")
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Finalize Success Dialog */}
+      <Dialog open={showFinalizeSuccessDialog} onOpenChange={setShowFinalizeSuccessDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{t("finalize.successTitle")}</DialogTitle>
+            <DialogDescription>
+              {t("finalize.successMessage")}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={handleFinalizeSuccessClose}>
               {t("common.ok")}
             </Button>
           </DialogFooter>

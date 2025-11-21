@@ -219,5 +219,18 @@
     "loadError": "Error loading invitation",
     "notFound": "Invitation not found",
     "goToLogin": "Go to Homepage"
+  },
+  "finalize": {
+    "title": "Finalize Assembly",
+    "message": "Please attach the protocol file to finalize the assembly.",
+    "protocolFile": "Protocol File",
+    "selectedFile": "Selected file",
+    "finalize": "Finalize",
+    "finalizing": "Finalizing...",
+    "error": "Error",
+    "noFile": "Please select a protocol file",
+    "failedToFinalize": "Failed to finalize the assembly. Please try again.",
+    "successTitle": "Assembly Finalized",
+    "successMessage": "The assembly is finalized. The protocol is available for all participants in the assembly."
   }
 }

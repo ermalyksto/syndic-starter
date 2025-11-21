@@ -214,5 +214,18 @@
     "loadError": "Erreur de chargement de l'invitation",
     "notFound": "Invitation non trouvée",
     "goToLogin": "Aller à la page d'accueil"
+  },
+  "finalize": {
+    "title": "Finaliser l'assemblée",
+    "message": "Veuillez joindre le fichier de protocole pour finaliser l'assemblée.",
+    "protocolFile": "Fichier de protocole",
+    "selectedFile": "Fichier sélectionné",
+    "finalize": "Finaliser",
+    "finalizing": "Finalisation...",
+    "error": "Erreur",
+    "noFile": "Veuillez sélectionner un fichier de protocole",
+    "failedToFinalize": "Échec de la finalisation de l'assemblée. Veuillez réessayer.",
+    "successTitle": "Assemblée finalisée",
+    "successMessage": "L'assemblée est finalisée. Le protocole est disponible pour tous les participants à l'assemblée."
   }
 }

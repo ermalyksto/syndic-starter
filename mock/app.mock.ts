@@ -13,6 +13,11 @@ export default defineMock([
     method: "POST",
     body: { invitationsSent: true },
   },
+    {
+    url: "/api/protocol/:assemblyId",
+    method: "POST",
+    body: { assemblyFinalized: true },
+  },
   {
     url: "/api/invitations/:id",
     method: "GET",

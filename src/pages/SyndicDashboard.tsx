@@ -240,6 +240,7 @@ const SyndicDashboard = () => {
                     onManage={handleManageClick}
                     onDelete={handleDeleteClick}
                     onInvite={handleInviteClick}
+                    onRefresh={loadData}
                     sendingInvites={sendingInvites}
                   />
                 ))}
