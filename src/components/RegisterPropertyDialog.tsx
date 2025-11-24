@@ -152,7 +152,7 @@ export const RegisterPropertyDialog = ({ open, onOpenChange, onSuccess }: Regist
     }
 
     const totalWeight = coOwners.reduce((sum, co) => sum + co.weight, 0);
-    if (Math.abs(totalWeight - 100) > 0.01) {
+    if (totalWeight > 100) {
       toast({
         title: t('properties.error'),
         description: t('properties.weightMustBe100'),
@@ -219,7 +219,7 @@ export const RegisterPropertyDialog = ({ open, onOpenChange, onSuccess }: Regist
                 <CardTitle className="flex items-center justify-between">
                   <span>{t('properties.coOwnersSection')}</span>
                   {coOwners.length > 0 && (
-                    <span className={`text-sm font-normal ${Math.abs(totalWeight - 100) < 0.01 ? 'text-green-600' : 'text-destructive'}`}>
+                    <span className={`text-sm font-normal ${totalWeight <= 100 ? 'text-green-600' : 'text-destructive'}`}>
                       {t('properties.totalWeight')}: {totalWeight.toFixed(2)}%
                     </span>
                   )}

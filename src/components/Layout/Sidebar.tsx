@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useTranslation } from "react-i18next";
+import { UserRole } from "@/types";
 
 interface SidebarProps {
   isMobileOpen?: boolean;
@@ -39,7 +40,7 @@ export const Sidebar = ({ isMobileOpen = false, onMobileClose }: SidebarProps) =
     { name: t('nav.signatures'), href: "/signatures", icon: ShieldCheck },
   ];
 
-  const navigation = user?.role === 'syndic' ? syndicNavigation : coOwnerNavigation;
+  const navigation = user?.role === UserRole.SYNDIC ? syndicNavigation : coOwnerNavigation;
 
   const handleLogout = () => {
     dispatch(logout());

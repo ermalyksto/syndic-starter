@@ -55,6 +55,14 @@ export default defineMock([
       return properties;
     }
   },
+  // register property
+  {
+    url: "/api/v1/properties",
+    method: "POST",
+    body: (req) => {
+      return {success: true}
+    }
+  },
   {
     url: "/api/v1/owners/:id",
     method: "GET",
