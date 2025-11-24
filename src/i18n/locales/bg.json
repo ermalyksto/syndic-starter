@@ -88,7 +88,9 @@
     "invalidEmail": "Моля, въведете валиден имейл адрес",
     "failedToDelegate": "Не можахме да делегираме вашия глас. Моля, опитайте отново.",
     "successTitle": "Успешно делегиране",
-    "successMessage": "Гласът е делегиран успешно на {{email}}"
+    "successMessage": "Гласът е делегиран успешно на {{email}}",
+    "selectOwner": "Съсобственик",
+    "selectOwnerPlaceholder": "Изберете съсобственик"
   },
   "owners": {
     "title": "Собственици",
@@ -188,6 +190,9 @@
     "weight": "Тежест",
     "totalWeight": "Обща тежест",
     "noProperties": "Няма регистрирани имоти",
+    "allProperties": "Всички имоти",
+    "selectProperty": "Изберете имот",
+    "property": "Имот",
     "more": "още",
     "success": "Успех",
     "registered": "Имотът е регистриран успешно",

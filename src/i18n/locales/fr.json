@@ -88,7 +88,9 @@
     "invalidEmail": "Veuillez entrer une adresse email valide",
     "failedToDelegate": "Impossible de déléguer votre vote. Veuillez réessayer.",
     "successTitle": "Délégation réussie",
-    "successMessage": "Vote délégué avec succès à {{email}}"
+    "successMessage": "Vote délégué avec succès à {{email}}",
+    "selectOwner": "Copropriétaire",
+    "selectOwnerPlaceholder": "Sélectionner un copropriétaire"
   },
   "owners": {
     "title": "Propriétaires",
@@ -188,6 +190,9 @@
     "weight": "Poids",
     "totalWeight": "Poids total",
     "noProperties": "Aucune propriété enregistrée",
+    "allProperties": "Toutes les propriétés",
+    "selectProperty": "Sélectionner une propriété",
+    "property": "Propriété",
     "more": "plus",
     "success": "Succès",
     "registered": "Propriété enregistrée avec succès",
