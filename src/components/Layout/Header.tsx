@@ -18,6 +18,7 @@ import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { setSelectedProperty } from "@/store/slices/propertySlice";
 import { useState, useEffect } from "react";
 import { mockApi, Property } from "@/services/mockApi";
+import { UserRole } from "@/types";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -31,7 +32,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
   const [properties, setProperties] = useState<Property[]>([]);
 
   useEffect(() => {
-    if (user?.role === 'syndic' && user?.id) {
+    if (user?.role === UserRole.SYNDIC && user?.id) {
       mockApi.getProperties(user.id).then(setProperties).catch(console.error);
     }
   }, [user]);
@@ -61,7 +62,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
         <Menu className="h-5 w-5" />
       </Button>
       
-      {user?.role === 'syndic' && (
+      {user?.role === UserRole.SYNDIC && (
         <div className="flex items-center gap-4 flex-1 max-w-xs">
           <Select 
             value={selectedPropertyId || 'all'} 

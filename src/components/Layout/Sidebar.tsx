@@ -60,7 +60,7 @@ export const Sidebar = ({ isMobileOpen = false, onMobileClose }: SidebarProps) =
         <p className="text-sm text-muted-foreground mt-1">Управление на имоти</p>
       </div>
 
-      {user?.role === 'syndic' && (
+      {user?.role === UserRole.SYNDIC && (
         <div className="p-4 border-b border-sidebar-border">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />

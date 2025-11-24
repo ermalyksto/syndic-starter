@@ -47,20 +47,20 @@ export default defineMock([
       };
     }
   },
-  {
-    url: "/api/v1/properties/:id",
-    body: (req) => {
-      const id = req.params[0];
-      console.log("Property owner", id);
-      return properties;
-    }
-  },
   // register property
   {
     url: "/api/v1/properties",
     method: "POST",
     body: (req) => {
       return {success: true}
+    }
+  },
+  {
+    url: "/api/v1/properties/:id",
+    body: (req) => {
+      const id = req.params[0];
+      console.log("Property owner", id);
+      return properties;
     }
   },
   {
