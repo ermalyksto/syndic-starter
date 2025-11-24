@@ -28,7 +28,7 @@ All colors MUST be HSL.
 
     /* Light backgrounds */
     --muted: 210 40% 96%;
-    --muted-foreground: 210 15% 45%;
+    --muted-foreground: 210 20% 35%;
 
     /* Accent teal */
     --accent: 180 75% 50%;
@@ -94,7 +94,7 @@ All colors MUST be HSL.
     --secondary-foreground: 210 40% 95%;
 
     --muted: 215 20% 18%;
-    --muted-foreground: 210 15% 60%;
+    --muted-foreground: 210 20% 70%;
 
     --accent: 180 75% 45%;
     --accent-foreground: 0 0% 100%;

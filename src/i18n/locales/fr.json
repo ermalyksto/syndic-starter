@@ -181,6 +181,7 @@
     "propertyLocationPlaceholder": "Entrez l'emplacement de la propriété",
     "coOwnersSection": "Copropriétaires",
     "coOwners": "copropriétaires",
+    "selectOwner": "Sélectionner propriétaire",
     "coOwnersList": "Liste des copropriétaires",
     "addCoOwner": "Ajouter copropriétaire",
     "coOwnerEmail": "Email",
@@ -204,7 +205,10 @@
     "atLeastOneCoOwner": "Vous devez ajouter au moins un copropriétaire",
     "weightMustBe100": "Le poids total des copropriétaires doit être exactement 100%",
     "cancelTitle": "Annuler l'enregistrement",
-    "cancelDescription": "Êtes-vous sûr de vouloir annuler ? Toutes les données saisies seront perdues."
+    "cancelDescription": "Êtes-vous sûr de vouloir annuler ? Toutes les données saisies seront perdues.",
+    "editProperty": "Modifier propriété",
+    "updateError": "Erreur de modification de la propriété",
+    "updated": "Propriété modifiée avec succès"
   },
   "invitation": {
     "title": "Invitation à l'assemblée",
