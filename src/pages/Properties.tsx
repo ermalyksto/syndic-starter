@@ -1,5 +1,5 @@
 import { MainLayout } from "@/components/Layout/MainLayout";
-import { Plus, Building2, MapPin, Users } from "lucide-react";
+import { Plus, Building2, MapPin, Users, Edit2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
@@ -25,6 +25,7 @@ export interface Property {
 const Properties = () => {
   const { t } = useTranslation();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [properties, setProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAppSelector((state) => state.auth);
@@ -52,10 +53,21 @@ const Properties = () => {
   const handleRegisterSuccess = () => {
     loadProperties();
     setIsDialogOpen(false);
+    setEditingProperty(null);
     toast({
       title: t('properties.success'),
-      description: t('properties.registered'),
+      description: editingProperty ? t('properties.updated') : t('properties.registered'),
     });
+  };
+
+  const handleEditClick = (property: Property) => {
+    setEditingProperty(property);
+    setIsDialogOpen(true);
+  };
+
+  const handleAddClick = () => {
+    setEditingProperty(null);
+    setIsDialogOpen(true);
   };
 
   return (
@@ -66,7 +78,7 @@ const Properties = () => {
             <h1 className="text-3xl font-bold">{t('properties.title')}</h1>
             <p className="text-muted-foreground mt-1">{t('properties.description')}</p>
           </div>
-          <Button onClick={() => setIsDialogOpen(true)}>
+          <Button onClick={handleAddClick}>
             <Plus className="h-4 w-4 mr-2" />
             {t('properties.register')}
           </Button>
@@ -122,6 +134,14 @@ const Properties = () => {
                       )}
                     </div>
                   </div>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => handleEditClick(property)}
+                  >
+                    <Edit2 className="h-4 w-4 mr-2" />
+                    {t('common.edit')}
+                  </Button>
                 </CardContent>
               </Card>
             ))}
@@ -130,8 +150,12 @@ const Properties = () => {
 
         <RegisterPropertyDialog
           open={isDialogOpen}
-          onOpenChange={setIsDialogOpen}
+          onOpenChange={(open) => {
+            setIsDialogOpen(open);
+            if (!open) setEditingProperty(null);
+          }}
           onSuccess={handleRegisterSuccess}
+          property={editingProperty}
         />
       </div>
     </MainLayout>

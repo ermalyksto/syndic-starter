@@ -11,15 +11,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { mockApi } from "@/services/mockApi";
 import { toast } from "@/hooks/use-toast";
 import { CoOwner } from "@/pages/Properties";
+import type { Property } from "@/pages/Properties";
 import { useAppSelector } from "@/store/hooks";
 
 interface RegisterPropertyDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSuccess: () => void;
+  property?: Property | null;
 }
 
-export const RegisterPropertyDialog = ({ open, onOpenChange, onSuccess }: RegisterPropertyDialogProps) => {
+export const RegisterPropertyDialog = ({ open, onOpenChange, onSuccess, property }: RegisterPropertyDialogProps) => {
   const { t } = useTranslation();
   const { user } = useAppSelector((state) => state.auth);
   const [propertyName, setPropertyName] = useState("");
@@ -39,6 +41,14 @@ export const RegisterPropertyDialog = ({ open, onOpenChange, onSuccess }: Regist
       loadOwners();
     }
   }, [open, user?.id]);
+
+  useEffect(() => {
+    if (property) {
+      setPropertyName(property.name);
+      setPropertyLocation(property.location);
+      setCoOwners(property.coOwners);
+    }
+  }, [property]);
 
   const loadOwners = async () => {
     setIsLoadingOwners(true);
@@ -163,17 +173,40 @@ export const RegisterPropertyDialog = ({ open, onOpenChange, onSuccess }: Regist
 
     try {
       setIsSubmitting(true);
-      await mockApi.createProperty({
-        name: propertyName,
-        location: propertyLocation,
-        coOwners,
-      });
+      
+      if (property) {
+        // Update existing property - POST to /api/v1/properties
+        const response = await fetch('/api/v1/properties', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: property.id,
+            name: propertyName,
+            location: propertyLocation,
+            coOwners,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update property');
+        }
+      } else {
+        // Create new property
+        await mockApi.createProperty({
+          name: propertyName,
+          location: propertyLocation,
+          coOwners,
+        });
+      }
+      
       resetForm();
       onSuccess();
     } catch (error) {
       toast({
         title: t('properties.error'),
-        description: t('properties.registerError'),
+        description: property ? t('properties.updateError') : t('properties.registerError'),
         variant: "destructive",
       });
     } finally {
@@ -188,7 +221,7 @@ export const RegisterPropertyDialog = ({ open, onOpenChange, onSuccess }: Regist
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{t('properties.registerProperty')}</DialogTitle>
+            <DialogTitle>{property ? t('properties.editProperty') : t('properties.registerProperty')}</DialogTitle>
           </DialogHeader>
 
           <div className="space-y-6">
@@ -324,7 +357,7 @@ export const RegisterPropertyDialog = ({ open, onOpenChange, onSuccess }: Regist
                 {t('common.cancel')}
               </Button>
               <Button onClick={handleRegister} disabled={isSubmitting}>
-                {t('properties.registerButton')}
+                {property ? t('common.update') : t('properties.registerButton')}
               </Button>
             </div>
           </div>
