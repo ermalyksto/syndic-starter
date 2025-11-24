@@ -54,7 +54,7 @@ const Invitation = () => {
         setLoading(true);
         setError(null);
         
-        const response = await fetch(`/api/invitations/${invitationId}`);
+        const response = await fetch(`/api/v1/invitations/${invitationId}`);
         const data = await response.json();
         
         if (!data.success) {

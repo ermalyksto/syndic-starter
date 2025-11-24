@@ -46,7 +46,7 @@ const VotingPage = () => {
   useEffect(() => {
     const fetchAssembly = async () => {
       try {
-        const response = await fetch(`/api/assemblies/${assemblyID}`);
+        const response = await fetch(`/api/v1/assemblies/${assemblyID}`);
         if (!response.ok) {
           throw new Error('Assembly not found');
         }
@@ -92,7 +92,7 @@ const VotingPage = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`/api/assemblies/${assemblyID}/vote`, {
+      const response = await fetch(`/api/v1/assemblies/${assemblyID}/vote`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -128,7 +128,7 @@ export const AssemblyCard = ({
     setIsDelegating(true);
 
     try {
-      const response = await fetch(`/api/assemblies/${assembly.id}/delegate`, {
+      const response = await fetch(`/api/v1/assemblies/${assembly.id}/delegate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -186,7 +186,7 @@ export const AssemblyCard = ({
       const formData = new FormData();
       formData.append("protocol", protocolFile);
 
-      const response = await fetch(`/api/protocol/${assembly.id}`, {
+      const response = await fetch(`/api/v1/protocol/${assembly.id}`, {
         method: "POST",
         body: formData,
       });

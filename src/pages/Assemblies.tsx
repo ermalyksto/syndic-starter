@@ -21,7 +21,7 @@ const Assemblies = () => {
   const fetchAssemblies = async () => {
     setIsLoading(true);
     try {
-      // const response = await fetch("/api/assemblies");
+      // const response = await fetch("/api/v1/assemblies");
       const data = await mockApi.getAssemblies(user.id);
 
       // const data = await response.json();

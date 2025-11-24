@@ -6,7 +6,7 @@ import coowner from "./login_coowner_POST.json";
 
 export const auth: MockOptions = [
   {
-    url: "/api/auth/login-email",
+    url: "/api/v1/auth/login-email",
     method: "POST",
     body: (req) => {
       const { email } = req.body;
@@ -17,7 +17,7 @@ export const auth: MockOptions = [
     },
   },
   {
-    url: "/api/auth/login",
+    url: "/api/v1/auth/login",
     method: "POST",
     body: (req) => {
       const { email } = req.body;

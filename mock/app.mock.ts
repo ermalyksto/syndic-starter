@@ -9,17 +9,17 @@ export default defineMock([
   ...auth,
   ...assemblies,
   {
-    url: "/api/invitations/:assemblyId",
+    url: "/api/v1/invitations/:assemblyId",
     method: "POST",
     body: { invitationsSent: true },
   },
     {
-    url: "/api/protocol/:assemblyId",
+    url: "/api/v1/protocol/:assemblyId",
     method: "POST",
     body: { assemblyFinalized: true },
   },
   {
-    url: "/api/invitations/:id",
+    url: "/api/v1/invitations/:id",
     method: "GET",
     body: (req) => {
       const invitationId = req.params.id || req.params[0];
@@ -48,7 +48,7 @@ export default defineMock([
     }
   },
   {
-    url: "/api/properties/:id",
+    url: "/api/v1/properties/:id",
     body: (req) => {
       const id = req.params[0];
       console.log("Property owner", id);
@@ -56,7 +56,7 @@ export default defineMock([
     }
   },
   {
-    url: "/api/owners/:id",
+    url: "/api/v1/owners/:id",
     method: "GET",
     body: (req) => {
       const id = req.params.id || req.params[0];
@@ -71,7 +71,7 @@ export default defineMock([
     }
   },
   {
-    url: "/api/owners/:id/property/:propertyId",
+    url: "/api/v1/owners/:id/property/:propertyId",
     method: "GET",
     body: (req) => {
       const userId = req.params.id || req.params[0];

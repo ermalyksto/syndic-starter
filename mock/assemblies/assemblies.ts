@@ -7,12 +7,12 @@ import { Assembly } from "../../src/types";
 
 export const assemblies: MockOptions = [
   {
-    url: "/api/assemblies",
+    url: "/api/v1/assemblies",
     method: "POST",
     body: {created: true}
   },
   {
-    url: "/api/assemblies/user/:id",
+    url: "/api/v1/assemblies/user/:id",
     body: (req) => {
       const { id } = req.params;
       const meetings =
@@ -21,11 +21,11 @@ export const assemblies: MockOptions = [
     },
   },
   {
-    url: "/api/assemblies/stats",
+    url: "/api/v1/assemblies/stats",
     body: stats,
   },
   {
-    url: "/api/assemblies/:id",
+    url: "/api/v1/assemblies/:id",
     method: "GET",
     body: (req) => {
       const { id } = req.params;
@@ -43,17 +43,17 @@ export const assemblies: MockOptions = [
     },
   },
   {
-    url: "/api/assemblies/:id/vote",
+    url: "/api/v1/assemblies/:id/vote",
     method: "POST",
     body: {}
   },
   {
-    url: "/api/assemblies/:id/delegate",
+    url: "/api/v1/assemblies/:id/delegate",
     method: "POST",
     body: {}
   },
   {
-    url: "/api/assemblies/user/:id/property/:propertyId",
+    url: "/api/v1/assemblies/user/:id/property/:propertyId",
     method: "GET",
     body: (req) => {
       const { id, propertyId } = req.params;

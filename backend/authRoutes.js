@@ -2,7 +2,7 @@ import express from "express";
 
 const router = express.Router();
 
-router.post("/api/auth/login-email", (req, res) => {
+router.post("/api/v1/auth/login-email", (req, res) => {
   const { email } = req.body;
 
   if (!email) {

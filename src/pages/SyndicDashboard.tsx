@@ -72,8 +72,8 @@ const SyndicDashboard = () => {
   const loadData = useCallback(async () => {
     try {
       const url = selectedPropertyId
-        ? `/api/assemblies/user/${user.id}/property/${selectedPropertyId}`
-        : `/api/assemblies/user/${user.id}`;
+        ? `/api/v1/assemblies/user/${user.id}/property/${selectedPropertyId}`
+        : `/api/v1/assemblies/user/${user.id}`;
       
       const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch assemblies");
@@ -113,7 +113,7 @@ const SyndicDashboard = () => {
     setSendingInvites(true);
     try {
       console.log("Send request", assemblyId);
-      const response = await fetch(`/api/invitations/${assemblyId}`, {
+      const response = await fetch(`/api/v1/invitations/${assemblyId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

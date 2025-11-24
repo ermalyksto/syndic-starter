@@ -9,7 +9,7 @@ Created a new public Invitation page that displays assembly meeting invitations 
 **Location:** `/pages/Invitation.tsx`
 
 **Features:**
-- Displays invitation details fetched from `/api/invitations/:id`
+- Displays invitation details fetched from `/api/v1/invitations/:id`
 - Shows sender name and invitation message
 - Displays assembly details (title, location, date/time)
 - Lists all agenda items
@@ -27,7 +27,7 @@ Created a new public Invitation page that displays assembly meeting invitations 
 - Muted background colors with proper contrast ratios
 
 **API Integration:**
-- Fetches data from `GET /api/invitations/:invitationId`
+- Fetches data from `GET /api/v1/invitations/:invitationId`
 - Handles success and error responses
 - Toast notifications for errors
 - Loading spinner during data fetch

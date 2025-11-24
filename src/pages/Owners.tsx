@@ -72,8 +72,8 @@ const Owners = () => {
     try {
       setIsLoading(true);
       const url = selectedPropertyId 
-        ? `/api/owners/${user.id}/property/${selectedPropertyId}`
-        : `/api/owners/${user.id}`;
+        ? `/api/v1/owners/${user.id}/property/${selectedPropertyId}`
+        : `/api/v1/owners/${user.id}`;
       const response = await fetch(url);
       
       if (!response.ok) {

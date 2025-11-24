@@ -5,7 +5,7 @@ export default function setupProxy(app) {
   const router = express.Router();
 
   // Mock login with email
-  router.post("/api/auth/login-email", (req, res) => {
+  router.post("/api/v1/auth/login-email", (req, res) => {
     const { email } = req.body;
 
     if (!email) {
@@ -20,11 +20,11 @@ export default function setupProxy(app) {
   });
 
   // Mock other endpoints (e.g., assemblies, properties)
-  router.get("/api/assemblies", (req, res) => {
+  router.get("/api/v1/assemblies", (req, res) => {
     res.json(mockApi.getAssembliesMock());
   });
 
-  router.get("/api/properties", (req, res) => {
+  router.get("/api/v1/properties", (req, res) => {
     res.json(mockApi.getPropertiesMock());
   });
 
