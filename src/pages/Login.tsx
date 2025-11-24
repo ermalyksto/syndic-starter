@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '@/store/hooks';
-import { setUser } from '@/store/slices/authSlice';
+import { setUser, setSessionId } from '@/store/slices/authSlice';
 import { mockApi } from '@/services/mockApi';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,6 +21,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [qrUrl, setQrUrl] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,6 +29,59 @@ const Login = () => {
   const { t } = useTranslation();
 
   const from = (location.state as any)?.from || '/';
+
+  // Cleanup polling on unmount
+  useEffect(() => {
+    return () => {
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+      }
+    };
+  }, []);
+
+  const pollSessionStatus = async (sessionId: string) => {
+    try {
+      const response = await fetch(`/api/v1/session-status/${sessionId}`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to check session status');
+      }
+
+      const data = await response.json();
+
+      if (data.status === 'verified') {
+        // Stop polling
+        if (pollingIntervalRef.current) {
+          clearInterval(pollingIntervalRef.current);
+          pollingIntervalRef.current = null;
+        }
+
+        // Create user object from session data
+        const user = {
+          id: sessionId,
+          email: email,
+          name: data.userFullName,
+          role: data.roles[0]
+        };
+
+        // Update auth state
+        dispatch(setUser(user));
+
+        // Show success toast
+        toast({
+          title: t('auth.successLogin'),
+          description: `${t('auth.welcome')}, ${user.name}!`,
+        });
+
+        // Navigate to destination
+        navigate(from, { replace: true });
+      }
+      // If status is 'waiting', continue polling (do nothing here)
+    } catch (error) {
+      console.error('Polling error:', error);
+      // Continue polling even on error
+    }
+  };
 
   const handleCopyUrl = async () => {
     if (qrUrl) {
@@ -53,18 +107,35 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const { qrUrl, user } = await mockApi.loginWithEmail(email);
+      // Step 1: Initialize session
+      const response = await fetch('/api/v1/init-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to initialize session');
+      }
+
+      const data = await response.json();
+      const sessionId = data.sessionId;
+      const qrUrl = data.qrUrl || data.authUrl || `https://auth.example.com/session/${sessionId}`;
+
+      // Step 2: Store session ID in state
+      dispatch(setSessionId(sessionId));
       setQrUrl(qrUrl);
-      
-      // Wait 5 seconds then redirect
-      setTimeout(() => {
-        dispatch(setUser(user));
-        toast({
-          title: t('auth.successLogin'),
-          description: `${t('auth.welcome')}, ${user.name}!`,
-        });
-        navigate(from, { replace: true });
-      }, 5000);
+
+      // Step 3: Start polling for session status every 3 seconds
+      pollingIntervalRef.current = setInterval(() => {
+        pollSessionStatus(sessionId);
+      }, 3000);
+
+      // Initial poll immediately
+      pollSessionStatus(sessionId);
+
     } catch (error) {
       toast({
         title: t('auth.error'),

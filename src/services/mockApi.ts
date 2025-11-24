@@ -45,7 +45,7 @@ export interface Property {
 }
 
 // API base URL - will use /api for development with setupProxy
-const API_BASE_URL = "/api";
+const API_BASE_URL = "/api/v1";
 
 const handleApiError = (error: unknown) => {
   if (error instanceof Response) {

@@ -1,0 +1,41 @@
+{
+    "ageOver18": true,
+    "permissions": [
+        "MEETING_DELETE",
+        "DELEGATION_VIEW_OWN",
+        "CO_OWNER_ADD",
+        "INVITATION_SEND",
+        "PROPERTY_VIEW_ALL",
+        "VOTING_VIEW_OWN",
+        "DELEGATION_CREATE",
+        "PROPERTY_MANAGE",
+        "AUDIT_LOG_VIEW",
+        "MEETING_EDIT",
+        "CO_OWNER_VIEW_ALL",
+        "DELEGATION_VIEW_ALL",
+        "SYSTEM_SETTINGS_EDIT",
+        "PROPERTY_VIEW_COOWNERS",
+        "INVITATION_VIEW_OWN",
+        "CO_OWNER_EDIT",
+        "MEETING_VIEW_ALL",
+        "PROPERTY_VIEW_OWN",
+        "VOTING_MANAGE",
+        "VOTING_VOTE",
+        "INVITATION_VIEW_ALL",
+        "VOTING_VIEW_RESULTS",
+        "MEETING_CREATE",
+        "CO_OWNER_REMOVE",
+        "MEETING_VIEW",
+        "MEETING_JOIN"
+    ],
+    "givenName": "Mike",
+    "familyName": null,
+    "roles": [
+        "ROLE_CO_OWNER"
+    ],
+    "userFullName": "Mike",
+    "sessionId": "b00ba2fe-9041-4358-a66d-0dda2cf246bo",
+    "birthDate": "2004-11-12",
+    "userFound": true,
+    "status": "verified"
+}

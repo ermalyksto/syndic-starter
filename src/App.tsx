@@ -25,8 +25,7 @@ const queryClient = new QueryClient();
 
 const DashboardRouter = () => {
   const { user } = useAppSelector((state) => state.auth);
-  
-  if (user?.role === 'syndic') {
+  if (user?.role === UserRole.SYNDIC) {
     return <SyndicDashboard />;
   }
   

@@ -4,6 +4,6 @@
     "id": "1",
     "email": "owner@prop.bg",
     "name": "Owner",
-    "role": "co-owner"
+    "role": "ROLE_CO_OWNER"
   }
 }

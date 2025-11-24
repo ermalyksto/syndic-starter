@@ -290,7 +290,7 @@ export const AssemblyCard = ({
           </div>
 
           <div className="flex gap-2 flex-wrap lg:flex-shrink-0">
-            {userRole === "syndic" && assembly.status === "draft" && (
+            {userRole === UserRole.SYNDIC && assembly.status === "draft" && (
               <>
                 <Button
                   variant="default"
@@ -319,7 +319,7 @@ export const AssemblyCard = ({
                 </Button>
               </>
             )}
-            {userRole === "syndic" && assembly.status === "active" && (
+            {userRole === UserRole.SYNDIC && assembly.status === "active" && (
               <Button
                 variant="default"
                 size="sm"
@@ -350,7 +350,7 @@ export const AssemblyCard = ({
                 {t("assemblies.protocol")}
               </Button>
             )}
-            {userRole === "syndic" && (
+            {userRole === UserRole.SYNDIC && (
               <Button variant="outline" size="sm">
                 <FileText className="h-4 w-4 mr-2" />
                 {t("dashboard.eventLog")}

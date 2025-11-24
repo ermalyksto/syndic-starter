@@ -1,0 +1,6 @@
+{
+
+    "vpUrl": "openid4vp://authorize?response_type=vp_token&client_id=https%3A%2F%2Fapi-rcc.be-ys.com%2Fvp-verifier%2Fpreprod%2Fapi%2Fv1%2Fverify&response_mode=direct_post&state=682792af-c46e-4143-8f89-2b8c37922923&presentation_definition_uri=https%3A%2F%2Fapi-rcc.be-ys.com%2Fvp-verifier%2Fpreprod%2Fapi%2Fv1%2Fpresentation-definition%3Fref%3D682792af-c46e-4143-8f89-2b8c37922923&nonce=tD5bYfyTtdqcLdmuHr0BwzmAqHY%3D&response_uri=https%3A%2F%2Fapi-rcc.be-ys.com%2Fvp-verifier%2Fpreprod%2Fapi%2Fv1%2Fverify&valid_until=2025-11-24T17%3A21%3A35.314075466Z",
+    "sessionId": "3b9d58ac-d95c-4bcf-ac24-2c65931a17a8"
+}
+ 

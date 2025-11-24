@@ -25,6 +25,6 @@ export enum AssemblyStatus{
 }
 
 export enum UserRole{
-  SYNDIC = "syndic",
-  COOWNER = "co-owner"
+  SYNDIC = "ROLE_SYNDIC",
+  COOWNER = "ROLE_CO_OWNER"
 }

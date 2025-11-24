@@ -4,6 +4,6 @@
     "id": "2",
     "email": "syndic@prop.bg",
     "name": "Syndic",
-    "role": "syndic"
+    "role": "ROLE_SYNDIC"
   }
 }
