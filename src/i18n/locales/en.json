@@ -205,7 +205,10 @@
     "atLeastOneCoOwner": "You must add at least one co-owner",
     "weightMustBe100": "Total weight of co-owners must be exactly 100%",
     "cancelTitle": "Cancel Registration",
-    "cancelDescription": "Are you sure you want to cancel? All entered data will be lost."
+    "cancelDescription": "Are you sure you want to cancel? All entered data will be lost.",
+    "editProperty": "Edit Property",
+    "updateError": "Error updating property",
+    "updated": "Property updated successfully"
   },
   "invitation": {
     "title": "Assembly Invitation",

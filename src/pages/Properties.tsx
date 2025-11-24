@@ -96,52 +96,68 @@ const Properties = () => {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="space-y-4">
             {properties.map((property) => (
-              <Card key={property.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Building2 className="h-5 w-5 text-primary" />
-                    {property.name}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-start gap-2 text-sm">
-                    <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
-                    <span className="text-muted-foreground">{property.location}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Users className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">
-                      {property.coOwners.length} {t('properties.coOwners')}
-                    </span>
-                  </div>
-                  <div className="pt-2 border-t">
-                    <p className="text-xs font-medium text-muted-foreground mb-2">
-                      {t('properties.coOwnersList')}:
-                    </p>
-                    <div className="space-y-1">
-                      {property.coOwners.slice(0, 3).map((coOwner) => (
-                        <div key={coOwner.id} className="flex justify-between text-xs">
-                          <span className="text-muted-foreground truncate">{coOwner.email}</span>
-                          <span className="text-muted-foreground font-medium">{coOwner.weight}%</span>
+              <Card key={property.id} className="hover:shadow-lg transition-shadow border-l-4 border-l-primary">
+                <CardContent className="p-6">
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div className="flex-1 space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-primary/10 rounded-lg">
+                          <Building2 className="h-5 w-5 text-primary" />
                         </div>
-                      ))}
-                      {property.coOwners.length > 3 && (
-                        <p className="text-xs text-muted-foreground">
-                          +{property.coOwners.length - 3} {t('properties.more')}
+                        <div>
+                          <h3 className="text-lg font-semibold text-foreground">{property.name}</h3>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                            <MapPin className="h-4 w-4" />
+                            <span>{property.location}</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-2 text-sm">
+                        <Users className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-muted-foreground">
+                          {property.coOwners.length} {t('properties.coOwners')}
+                        </span>
+                      </div>
+
+                      <div className="pt-3 border-t border-border">
+                        <p className="text-sm font-medium text-foreground mb-3">
+                          {t('properties.coOwnersList')}:
                         </p>
-                      )}
+                        <div className="space-y-2">
+                          {property.coOwners.map((coOwner, index) => (
+                            <div 
+                              key={coOwner.id} 
+                              className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border border-border/50"
+                            >
+                              <div className="flex items-center gap-3 flex-1 min-w-0">
+                                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-medium flex-shrink-0">
+                                  {index + 1}
+                                </div>
+                                <span className="text-sm text-foreground truncate">{coOwner.email}</span>
+                              </div>
+                              <span className="text-sm font-semibold text-foreground bg-background px-3 py-1 rounded-md border border-border ml-3 flex-shrink-0">
+                                {coOwner.weight}%
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex lg:flex-col gap-2 lg:items-end">
+                      <Button
+                        variant="outline"
+                        className="flex-1 lg:flex-initial"
+                        onClick={() => handleEditClick(property)}
+                      >
+                        <Edit2 className="h-4 w-4 mr-2" />
+                        {t('common.edit')}
+                      </Button>
                     </div>
                   </div>
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => handleEditClick(property)}
-                  >
-                    <Edit2 className="h-4 w-4 mr-2" />
-                    {t('common.edit')}
-                  </Button>
                 </CardContent>
               </Card>
             ))}
