@@ -1,5 +1,5 @@
 import { MainLayout } from "@/components/Layout/MainLayout";
-import { Plus, Building2, MapPin, Users, Edit2 } from "lucide-react";
+import { Plus, Building2, MapPin, Users, Edit2, ChevronDown, ChevronUp } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
@@ -28,6 +28,7 @@ const Properties = () => {
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [properties, setProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [expandedPropertyId, setExpandedPropertyId] = useState<string | null>(null);
   const { user } = useAppSelector((state) => state.auth);
 
   const loadProperties = async () => {
@@ -97,70 +98,89 @@ const Properties = () => {
           </Card>
         ) : (
           <div className="space-y-4">
-            {properties.map((property) => (
-              <Card key={property.id} className="hover:shadow-lg transition-shadow border-l-4 border-l-primary">
-                <CardContent className="p-6">
-                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                    <div className="flex-1 space-y-3">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-primary/10 rounded-lg">
-                          <Building2 className="h-5 w-5 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-semibold text-foreground">{property.name}</h3>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                            <MapPin className="h-4 w-4" />
-                            <span>{property.location}</span>
+            {properties.map((property) => {
+              const isExpanded = expandedPropertyId === property.id;
+              
+              return (
+                <div key={property.id} className="p-4 bg-muted rounded-lg hover:bg-muted/80 transition-colors">
+                  <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+                    <div className="flex-1 space-y-2">
+                      <div className="flex items-start justify-between gap-3 flex-wrap">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-primary/10 rounded-lg">
+                            <Building2 className="h-5 w-5 text-primary" />
                           </div>
+                          <h3 className="font-semibold text-foreground">{property.name}</h3>
                         </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-2 text-sm">
-                        <Users className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">
-                          {property.coOwners.length} {t('properties.coOwners')}
-                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEditClick(property)}
+                        >
+                          <Edit2 className="h-4 w-4 mr-2" />
+                          {t('common.edit')}
+                        </Button>
                       </div>
 
-                      <div className="pt-3 border-t border-border">
-                        <p className="text-sm font-medium text-foreground mb-3">
-                          {t('properties.coOwnersList')}:
-                        </p>
-                        <div className="space-y-2">
-                          {property.coOwners.map((coOwner, index) => (
-                            <div 
-                              key={coOwner.id} 
-                              className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border border-border/50"
-                            >
-                              <div className="flex items-center gap-3 flex-1 min-w-0">
-                                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-medium flex-shrink-0">
-                                  {index + 1}
-                                </div>
-                                <span className="text-sm text-foreground truncate">{coOwner.email}</span>
-                              </div>
-                              <span className="text-sm font-semibold text-foreground bg-background px-3 py-1 rounded-md border border-border ml-3 flex-shrink-0">
-                                {coOwner.weight}%
-                              </span>
-                            </div>
-                          ))}
+                      <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <MapPin className="h-4 w-4" />
+                          <span>{property.location}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Users className="h-4 w-4" />
+                          <span>
+                            {property.coOwners.length} {t('properties.coOwners')}
+                          </span>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="flex lg:flex-col gap-2 lg:items-end">
-                      <Button
-                        variant="outline"
-                        className="flex-1 lg:flex-initial"
-                        onClick={() => handleEditClick(property)}
-                      >
-                        <Edit2 className="h-4 w-4 mr-2" />
-                        {t('common.edit')}
-                      </Button>
+                      {/* Co-Owners List Section */}
+                      {property.coOwners && property.coOwners.length > 0 && (
+                        <div className="pt-2">
+                          <button
+                            onClick={() => setExpandedPropertyId(isExpanded ? null : property.id)}
+                            className="flex items-center gap-2 text-sm font-medium text-primary hover:underline cursor-pointer"
+                          >
+                            {isExpanded ? (
+                              <ChevronUp className="h-4 w-4" />
+                            ) : (
+                              <ChevronDown className="h-4 w-4" />
+                            )}
+                            <span>
+                              {t('properties.coOwnersList')} ({property.coOwners.length} {t('properties.coOwners')})
+                            </span>
+                          </button>
+                          
+                          {isExpanded && (
+                            <ul className="mt-3 space-y-2 pl-6">
+                              {property.coOwners.map((coOwner, idx) => (
+                                <li
+                                  key={coOwner.id}
+                                  className="text-sm flex items-center justify-between gap-3 p-2 bg-background/50 rounded border border-border/30"
+                                >
+                                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                                    <span className="text-primary font-medium flex-shrink-0">
+                                      {idx + 1}.
+                                    </span>
+                                    <span className="text-foreground truncate">
+                                      {coOwner.email}
+                                    </span>
+                                  </div>
+                                  <span className="text-sm font-semibold text-foreground bg-muted px-2 py-1 rounded flex-shrink-0">
+                                    {coOwner.weight}%
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                </div>
+              );
+            })}
           </div>
         )}
 

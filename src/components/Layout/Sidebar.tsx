@@ -73,17 +73,21 @@ export const Sidebar = ({ isMobileOpen = false, onMobileClose }: SidebarProps) =
       )}
       
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-        {navigation.map((item) => (
-          <NavLink
-            key={item.name}
-            to={item.href}
-            onClick={handleNavClick}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent transition-colors"
-            activeClassName="bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary"
-          >
-            <item.icon className="h-5 w-5" />
-            <span className="font-medium">{item.name}</span>
-          </NavLink>
+        {navigation.map((item, index) => (
+          <div key={item.name}>
+            {item.href === "/properties" && (
+              <div className="my-2 border-t border-sidebar-border" />
+            )}
+            <NavLink
+              to={item.href}
+              onClick={handleNavClick}
+              className="flex items-center gap-3 px-4 py-3 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent transition-colors"
+              activeClassName="bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary"
+            >
+              <item.icon className="h-5 w-5" />
+              <span className="font-medium">{item.name}</span>
+            </NavLink>
+          </div>
         ))}
       </nav>
 
